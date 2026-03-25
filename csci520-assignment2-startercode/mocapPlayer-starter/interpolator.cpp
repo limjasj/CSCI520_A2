@@ -215,12 +215,6 @@ void Interpolator::Euler2Quaternion(double angles[3], Quaternion<double> & q)
     double qy = cz * sy * cx - sz * cy * sx; // y
     double qz = sz * cy * cx + cz * sy * sx; // z
 
-    /*double norm = sqrt(qs * qs + qx * qx + qy * qy + qz * qz);
-    qs /= norm;
-    qx /= norm;
-    qy /= norm;
-    qz /= norm;*/
-
 	q.Set(qs, qx, qy, qz); // identity quaternion
 }
 
@@ -240,9 +234,26 @@ Quaternion<double> Interpolator::Slerp(double t, Quaternion<double> & qStart, Qu
 {
   // students should implement this
   Quaternion<double> result;
+  double dot = qStart.Gets() * qEnd_.Gets() + qStart.Getx() * qEnd_.Getx() +
+      qStart.Gety() * qEnd_.Gety() + qStart.Getz() * qEnd_.Getz();
 
-  double q1Coeff = sin((1 - t));
+  // Shortest path
+  if (dot < 0.0)
+  {
+      dot = -dot;
+      qEnd_= qEnd_ * -1;
+  }
 
+  // Clamp
+  if (dot > 1.0) dot = 1.0;
+  if (dot < -1.0) dot = -1.0;
+
+  // Angle
+  double theta = acos(dot);
+
+  double q1Coeff = sin((1 - t)* theta)/ sin(theta);
+  double q2Coeff = sin(t * theta) / sin(theta);
+  result = (q1Coeff * qStart) + (q2Coeff * qEnd_);
 
   return result;
 }
