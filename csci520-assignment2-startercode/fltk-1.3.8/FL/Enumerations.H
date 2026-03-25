@@ -21,154 +21,155 @@
 #ifndef Fl_Enumerations_H
 #define Fl_Enumerations_H
 
-/*
- ******************************************************************************
- * Notes on FL_ABI_VERSION and deprecated (obsolete) FLTK_ABI_VERSION:
- *
- * (1)	FLTK_ABI_VERSION is deprecated, but still defined below.
- *	Do NOT define FLTK_ABI_VERSION here - it would be overwritten later.
- *
- * (2)	FL_ABI_VERSION is now (as of FLTK 1.3.4) defined by configure
- *	or CMake. Do NOT define it here. Its definition will be included
- *	below by "#include <FL/abi-version.h>".
- *
- * (3)	If you use the provided IDE files (Windows VC++ or Xcode) you should
- *	edit the definition in the provided file abi-version.ide. The correct
- *	file is `/path/to/fltk/abi-version.ide' .
- *
- ******************************************************************************
- * For more informations on FL_ABI_VERSION see README.abi-version.txt.
- ******************************************************************************
- */
+ /*
+  ******************************************************************************
+  * Notes on FL_ABI_VERSION and deprecated (obsolete) FLTK_ABI_VERSION:
+  *
+  * (1)	FLTK_ABI_VERSION is deprecated, but still defined below.
+  *	Do NOT define FLTK_ABI_VERSION here - it would be overwritten later.
+  *
+  * (2)	FL_ABI_VERSION is now (as of FLTK 1.3.4) defined by configure
+  *	or CMake. Do NOT define it here. Its definition will be included
+  *	below by "#include <FL/abi-version.h>".
+  *
+  * (3)	If you use the provided IDE files (Windows VC++ or Xcode) you should
+  *	edit the definition in the provided file abi-version.ide. The correct
+  *	file is `/path/to/fltk/abi-version.ide' .
+  *
+  ******************************************************************************
+  * For more informations on FL_ABI_VERSION see README.abi-version.txt.
+  ******************************************************************************
+  */
 
 #include <FL/abi-version.h>
+
 
 #  include "Fl_Export.H"
 #  include "fl_types.h"
 
-/** \name Version Numbers
+  /** \name Version Numbers
 
-    FLTK defines some constants to help the programmer to
-    find out, for which FLTK version a program is compiled.
-    
-    The following constants are defined:
- */
-/*@{*/
+      FLTK defines some constants to help the programmer to
+      find out, for which FLTK version a program is compiled.
 
-/**
-   The major release version of this FLTK library.
-   \sa FL_VERSION
- */
+      The following constants are defined:
+   */
+   /*@{*/
+
+   /**
+      The major release version of this FLTK library.
+      \sa FL_VERSION
+    */
 #define FL_MAJOR_VERSION	1
 
-/**
-   The minor release version for this library.
+    /**
+       The minor release version for this library.
 
-   FLTK remains mostly source-code compatible between minor version changes.
- */
+       FLTK remains mostly source-code compatible between minor version changes.
+     */
 #define FL_MINOR_VERSION	3
 
-/**
-   The patch version for this library.
+     /**
+        The patch version for this library.
 
-   FLTK remains binary compatible between patches.
- */
+        FLTK remains binary compatible between patches.
+      */
 #define FL_PATCH_VERSION	8
 
-/**
-    The FLTK version number as a \em double.
+      /**
+          The FLTK version number as a \em double.
 
-    FL_VERSION is a \em double that describes the major, minor, and patch
-    version numbers.
+          FL_VERSION is a \em double that describes the major, minor, and patch
+          version numbers.
 
-    Version 1.2.3 is actually stored as 1.0203 to allow for more than 9
-    minor and patch releases.
+          Version 1.2.3 is actually stored as 1.0203 to allow for more than 9
+          minor and patch releases.
 
-    \deprecated This \p double version number is retained for compatibility
-    with existing program code. New code should use \em int FL_API_VERSION
-    instead. FL_VERSION is deprecated because comparisons of floating point
-    values may fail due to rounding errors. However, there are currently no
-    plans to remove this deprecated constant.
+          \deprecated This \p double version number is retained for compatibility
+          with existing program code. New code should use \em int FL_API_VERSION
+          instead. FL_VERSION is deprecated because comparisons of floating point
+          values may fail due to rounding errors. However, there are currently no
+          plans to remove this deprecated constant.
 
-    FL_VERSION is equivalent to <em>(double)FL_API_VERSION / 10000</em>.
+          FL_VERSION is equivalent to <em>(double)FL_API_VERSION / 10000</em>.
 
-    \see Fl::version() (deprecated as well)
-    \see FL_API_VERSION
-    \see Fl::api_version()
- */
+          \see Fl::version() (deprecated as well)
+          \see FL_API_VERSION
+          \see Fl::api_version()
+       */
 #define FL_VERSION	( (double)FL_MAJOR_VERSION + \
 			  (double)FL_MINOR_VERSION * 0.01 + \
 			  (double)FL_PATCH_VERSION * 0.0001 )
 
-/**
-    The FLTK API version number as an \em int.
+       /**
+           The FLTK API version number as an \em int.
 
-    FL_API_VERSION is an \em int that describes the major, minor, and patch
-    version numbers.
+           FL_API_VERSION is an \em int that describes the major, minor, and patch
+           version numbers.
 
-    Version 1.2.3 is actually stored as 10203 to allow for more than 9
-    minor and patch releases.
+           Version 1.2.3 is actually stored as 10203 to allow for more than 9
+           minor and patch releases.
 
-    The FL_MAJOR_VERSION, FL_MINOR_VERSION, and FL_PATCH_VERSION constants
-    give the integral values for the major, minor, and patch releases
-    respectively.
+           The FL_MAJOR_VERSION, FL_MINOR_VERSION, and FL_PATCH_VERSION constants
+           give the integral values for the major, minor, and patch releases
+           respectively.
 
-    \note FL_API_VERSION is intended to replace the deprecated
-    \em double FL_VERSION.
+           \note FL_API_VERSION is intended to replace the deprecated
+           \em double FL_VERSION.
 
-    \see Fl::api_version()
- */
+           \see Fl::api_version()
+        */
 #define FL_API_VERSION (FL_MAJOR_VERSION*10000 + FL_MINOR_VERSION*100 + FL_PATCH_VERSION)
 
-/**
-    The FLTK ABI (Application Binary Interface) version number as an \em int.
+        /**
+            The FLTK ABI (Application Binary Interface) version number as an \em int.
 
-    FL_ABI_VERSION is an \em int that describes the major, minor, and patch
-    ABI version numbers in the same format as FL_API_VERSION.
+            FL_ABI_VERSION is an \em int that describes the major, minor, and patch
+            ABI version numbers in the same format as FL_API_VERSION.
 
-    The ABI version number \p FL_ABI_VERSION is usually the same as the
-    API version \p FL_API_VERSION with the last two digits set to '00'.
+            The ABI version number \p FL_ABI_VERSION is usually the same as the
+            API version \p FL_API_VERSION with the last two digits set to '00'.
 
-    FLTK retains the ABI (Application Binary Interface) during patch
-    releases of the same major and minor versions. Examples:
+            FLTK retains the ABI (Application Binary Interface) during patch
+            releases of the same major and minor versions. Examples:
 
-    \verbatim
-      FLTK Version  FL_API_VERSION  FL_ABI_VERSION  FL_VERSION (deprecated)
-        1.3.0          10300           10300           1.0300
-	1.3.4          10304           10300           1.0304
-    \endverbatim
+            \verbatim
+              FLTK Version  FL_API_VERSION  FL_ABI_VERSION  FL_VERSION (deprecated)
+                1.3.0          10300           10300           1.0300
+            1.3.4          10304           10300           1.0304
+            \endverbatim
 
-    Version 1.2.3 is actually stored as 10203 to allow for more than 9
-    minor and patch releases.
+            Version 1.2.3 is actually stored as 10203 to allow for more than 9
+            minor and patch releases.
 
-    The FL_MAJOR_VERSION, FL_MINOR_VERSION, and FL_PATCH_VERSION constants
-    give the integral values for the major, minor, and patch releases
-    respectively.
+            The FL_MAJOR_VERSION, FL_MINOR_VERSION, and FL_PATCH_VERSION constants
+            give the integral values for the major, minor, and patch releases
+            respectively.
 
-    To enable new ABI-breaking features in patch releases you can configure
-    FLTK to use a higher FL_ABI_VERSION.
+            To enable new ABI-breaking features in patch releases you can configure
+            FLTK to use a higher FL_ABI_VERSION.
 
-    \see README.abi-version.txt
- */
+            \see README.abi-version.txt
+         */
 #ifndef FL_ABI_VERSION
 #define FL_ABI_VERSION (FL_MAJOR_VERSION*10000 + FL_MINOR_VERSION*100)
 #endif
 
-/*
-  Check if FL_ABI_VERSION is out of allowed range; redefine if necessary.
+         /*
+           Check if FL_ABI_VERSION is out of allowed range; redefine if necessary.
 
-  This is done to prevent users from defining an illegal ABI version.
+           This is done to prevent users from defining an illegal ABI version.
 
-  Rule: FL_MAJOR_VERSION * 10000 + FL_MINOR_VERSION * 100
-	  <= FL_ABI_VERSION <= FL_API_VERSION.
+           Rule: FL_MAJOR_VERSION * 10000 + FL_MINOR_VERSION * 100
+               <= FL_ABI_VERSION <= FL_API_VERSION.
 
-  Example (FLTK 1.3.4):
+           Example (FLTK 1.3.4):
 
-    10300 <= FL_ABI_VERSION <= 10304
+             10300 <= FL_ABI_VERSION <= 10304
 
-  Note: configure + CMake can be used to define FL_ABI_VERSION, but they
-  do not check validity. This is done here.
-*/
+           Note: configure + CMake can be used to define FL_ABI_VERSION, but they
+           do not check validity. This is done here.
+         */
 
 #if FL_ABI_VERSION < FL_MAJOR_VERSION*10000 + FL_MINOR_VERSION*100
 
@@ -182,12 +183,12 @@
 
 #endif
 
-/*
-  FLTK_ABI_VERSION is deprecated (replaced by FL_ABI_VERSION).
+         /*
+           FLTK_ABI_VERSION is deprecated (replaced by FL_ABI_VERSION).
 
-  This deprecated constant will be removed in FLTK 1.4.0 and later.
-  Please use FL_ABI_VERSION when FLTK 1.4.0 has been released.
-*/
+           This deprecated constant will be removed in FLTK 1.4.0 and later.
+           Please use FL_ABI_VERSION when FLTK 1.4.0 has been released.
+         */
 
 #ifdef FLTK_ABI_VERSION
 #undef FLTK_ABI_VERSION
@@ -195,236 +196,236 @@
 
 #define FLTK_ABI_VERSION FL_ABI_VERSION
 
-/*@}*/	// group: Version Numbers
+         /*@}*/	// group: Version Numbers
 
-/**
-    Every time a user moves the mouse pointer, clicks a button,
-    or presses a key, an event is generated and sent to your
-    application. Events can also come from other programs like the
-    window manager.
-   
-    Events are identified by the integer argument passed to the 
-    Fl_Widget::handle() virtual method. Other information about the 
-    most recent event is stored in static locations and acquired  by 
-    calling the Fl::event_*() methods. This static information remains 
-    valid until the next event is read from the window system, so it 
-    is ok to look at it outside of the handle() method.
+         /**
+             Every time a user moves the mouse pointer, clicks a button,
+             or presses a key, an event is generated and sent to your
+             application. Events can also come from other programs like the
+             window manager.
 
-    Event numbers can be converted to their actual names using the
-    \ref fl_eventnames[] array defined in \#include &lt;FL/names.h&gt;
+             Events are identified by the integer argument passed to the
+             Fl_Widget::handle() virtual method. Other information about the
+             most recent event is stored in static locations and acquired  by
+             calling the Fl::event_*() methods. This static information remains
+             valid until the next event is read from the window system, so it
+             is ok to look at it outside of the handle() method.
 
-    \sa Fl::event_text(), Fl::event_key(), class Fl::
- */
-// DEV NOTE: Keep this list in sync with FL/names.H
+             Event numbers can be converted to their actual names using the
+             \ref fl_eventnames[] array defined in \#include &lt;FL/names.h&gt;
+
+             \sa Fl::event_text(), Fl::event_key(), class Fl::
+          */
+          // DEV NOTE: Keep this list in sync with FL/names.H
 enum Fl_Event {	// events
-  /** No event. */
-  FL_NO_EVENT		= 0,
+    /** No event. */
+    FL_NO_EVENT = 0,
 
-  /** A mouse button has gone down with the mouse pointing at this
-      widget. You can find out what button by calling Fl::event_button(). 
-      You find out the mouse position by calling Fl::event_x() and
-      Fl::event_y().
+    /** A mouse button has gone down with the mouse pointing at this
+        widget. You can find out what button by calling Fl::event_button().
+        You find out the mouse position by calling Fl::event_x() and
+        Fl::event_y().
 
-      A widget indicates that it "wants" the mouse click by returning non-zero 
-      from its Fl_Widget::handle() method. It will then become the 
-      Fl::pushed() widget and will get FL_DRAG and the matching FL_RELEASE events.  
-      If Fl_Widget::handle() returns zero then FLTK will try sending the FL_PUSH 
-      to another widget. 
-   */
-  FL_PUSH		= 1,
-
-  /** A mouse button has been released. You can find out what button by 
-      calling Fl::event_button().
-
-      In order to receive the FL_RELEASE event, the widget must return 
-      non-zero when handling FL_PUSH.
-   */
-  FL_RELEASE		= 2,
-
-  /** The mouse has been moved to point at this widget.  This can
-      be used for highlighting feedback.  If a widget wants to
-      highlight or otherwise track the mouse, it indicates this by
-      returning non-zero from its handle() method. It then
-      becomes the Fl::belowmouse() widget and will receive 
-      FL_MOVE and FL_LEAVE events.
-   */
-  FL_ENTER		= 3,
-
-  /** The mouse has moved out of the widget.
-      In order to receive the FL_LEAVE event, the widget must 
-      return non-zero when handling FL_ENTER.
-   */
-  FL_LEAVE		= 4,
-
-  /** The mouse has moved with a button held down. The current button state 
-      is in Fl::event_state(). The mouse position is in Fl::event_x() and 
-      Fl::event_y().
-
-      In order to receive FL_DRAG events, the widget must return non-zero 
-      when handling FL_PUSH.
-   */
-  FL_DRAG		= 5,
-
-  /** This indicates an <I>attempt</I> to give a widget the keyboard focus.
-
-      If a widget wants the focus, it should change itself to display the 
-      fact that it has the focus, and return non-zero from its handle() method.
-      It then becomes the Fl::focus() widget and gets FL_KEYDOWN, FL_KEYUP, 
-      and FL_UNFOCUS events.
-
-      The focus will change either because the window manager changed which 
-      window gets the focus, or because the user tried to navigate using tab, 
-      arrows, or other keys. You can check Fl::event_key() to figure out why 
-      it moved. For navigation it will be the key pressed and for interaction 
-      with the window manager it will be zero.
-   */
-  FL_FOCUS		= 6,
-  
-  /** This event is sent to the previous Fl::focus() widget when another 
-      widget gets the focus or the window loses focus.
-   */
-  FL_UNFOCUS		= 7,
-
-  /** A key was pressed (FL_KEYDOWN) or released (FL_KEYUP). 
-      Fl_KEYBOARD is a synonym for FL_KEYDOWN.
-      The key can be found in Fl::event_key().
-      The text that the key should insert can be found with Fl::event_text() 
-      and its length is in Fl::event_length(). If you use the key handle()
-      should return 1. If you return zero then FLTK assumes you ignored the 
-      key and will then attempt to send it to a parent widget. If none of 
-      them want it, it will change the event into a FL_SHORTCUT event.
-
-      To receive FL_KEYBOARD events you must also respond to the FL_FOCUS
-      and FL_UNFOCUS events.
-
-      If you are writing a text-editing widget you may also want to call 
-      the Fl::compose() function to translate individual keystrokes into 
-      non-ASCII characters.
-
-      FL_KEYUP events are sent to the widget that currently has focus. This 
-      is not necessarily the same widget that received the corresponding 
-      FL_KEYDOWN event because focus may have changed between events.
-   */
-  FL_KEYDOWN		= 8,
-
-  /** Equivalent to FL_KEYDOWN.
-      \see FL_KEYDOWN
-   */
-  FL_KEYBOARD		= 8,
- 
-  /** Key release event.
-      \see FL_KEYDOWN
-   */
-  FL_KEYUP		= 9,
-
-  /** The user clicked the close button of a window.
-      This event is used internally only to trigger the callback of
-      Fl_Window derived classed. The default callback closes the 
-      window calling Fl_Window::hide().
-   */
-  FL_CLOSE		= 10,
-
-  /** The mouse has moved without any mouse buttons held down. 
-      This event is sent to the Fl::belowmouse() widget.
-
-      In order to receive FL_MOVE events, the widget must return 
-      non-zero when handling FL_ENTER.
-   */
-  FL_MOVE		= 11,
-
-  /** If the Fl::focus() widget is zero or ignores an FL_KEYBOARD
-      event then FLTK tries sending this event to every widget it 
-      can, until one of them returns non-zero. FL_SHORTCUT is first 
-      sent to the Fl::belowmouse() widget, then its parents and siblings, 
-      and eventually to every widget in the window, trying to find an 
-      object that returns non-zero. FLTK tries really hard to not to ignore 
-      any keystrokes!
-
-      You can also make "global" shortcuts by using Fl::add_handler(). A 
-      global shortcut will work no matter what windows are displayed or 
-      which one has the focus.
-   */
-  FL_SHORTCUT		= 12,
-
-  /** This widget is no longer active, due to Fl_Widget::deactivate() 
-      being called on it or one of its parents. Fl_Widget::active() may 
-      still be true after this, the widget is only active if Fl_Widget::active()
-      is true on it and all its parents (use Fl_Widget::active_r() to check this).
-   */
-  FL_DEACTIVATE		= 13,
-
-  /** This widget is now active, due to Fl_Widget::activate() being 
-      called on it or one of its parents.
-   */
-  FL_ACTIVATE		= 14,
-
-  /** This widget is no longer visible, due to Fl_Widget::hide() being 
-      called on it or one of its parents, or due to a parent window being 
-      minimized.  Fl_Widget::visible() may still be true after this, but the 
-      widget is visible only if visible() is true for it and all its 
-      parents (use Fl_Widget::visible_r() to check this).
-   */
-  FL_HIDE		= 15,
-
-  /** This widget is visible again, due to Fl_Widget::show() being called on 
-      it or one of its parents, or due to a parent window being restored. 
-      Child Fl_Windows respond to this by actually creating the window if not 
-      done already, so if you subclass a window, be sure to pass FL_SHOW 
-      to the base class Fl_Widget::handle() method!
-   */
-  FL_SHOW		= 16,
-
-  /** You should get this event some time after you call Fl::paste(). 
-      The contents of Fl::event_text() is the text to insert and the number 
-      of characters is in Fl::event_length().
-   */
-  FL_PASTE		= 17,
-
-  /** The Fl::selection_owner() will get this event before the selection is 
-      moved to another widget. This indicates that some other widget or program 
-      has claimed the selection. Motif programs used this to clear the selection 
-      indication. Most modern programs ignore this.
-   */
-  FL_SELECTIONCLEAR	= 18,
-
-  /** The user has moved the mouse wheel. The Fl::event_dx() and Fl::event_dy()
-      methods can be used to find the amount to scroll horizontally and vertically.
-   */
-  FL_MOUSEWHEEL		= 19,
-
-  /** The mouse has been moved to point at this widget. A widget that is 
-      interested in receiving drag'n'drop data must return 1 to receive 
-      FL_DND_DRAG, FL_DND_LEAVE and FL_DND_RELEASE events.
-   */
-  FL_DND_ENTER		= 20,
-
-  /** The mouse has been moved inside a widget while dragging data.  A 
-      widget that is interested in receiving drag'n'drop data should 
-      indicate the possible drop position.
-   */
-  FL_DND_DRAG		= 21,
-
-  /** The mouse has moved out of the widget.
-   */
-  FL_DND_LEAVE		= 22,
-
-  /** The user has released the mouse button dropping data into the widget. 
-      If the widget returns 1, it will receive the data in the immediately 
-      following FL_PASTE event.
-   */
-  FL_DND_RELEASE	= 23,
-  /** The screen configuration (number, positions) was changed.
-   Use Fl::add_handler() to be notified of this event.
-   */
-  FL_SCREEN_CONFIGURATION_CHANGED = 24,
-  /** The fullscreen state of the window has changed
-   */
-  FL_FULLSCREEN         = 25,
-  /** The user has made a zoom/pinch/magnification gesture. 
-      The Fl::event_dy() method can be used to find magnification amount,
-      Fl::event_x() and Fl::event_y() are set as well.
+        A widget indicates that it "wants" the mouse click by returning non-zero
+        from its Fl_Widget::handle() method. It will then become the
+        Fl::pushed() widget and will get FL_DRAG and the matching FL_RELEASE events.
+        If Fl_Widget::handle() returns zero then FLTK will try sending the FL_PUSH
+        to another widget.
      */
-  FL_ZOOM_GESTURE	= 26
+    FL_PUSH = 1,
+
+    /** A mouse button has been released. You can find out what button by
+        calling Fl::event_button().
+
+        In order to receive the FL_RELEASE event, the widget must return
+        non-zero when handling FL_PUSH.
+     */
+    FL_RELEASE = 2,
+
+    /** The mouse has been moved to point at this widget.  This can
+        be used for highlighting feedback.  If a widget wants to
+        highlight or otherwise track the mouse, it indicates this by
+        returning non-zero from its handle() method. It then
+        becomes the Fl::belowmouse() widget and will receive
+        FL_MOVE and FL_LEAVE events.
+     */
+    FL_ENTER = 3,
+
+    /** The mouse has moved out of the widget.
+        In order to receive the FL_LEAVE event, the widget must
+        return non-zero when handling FL_ENTER.
+     */
+    FL_LEAVE = 4,
+
+    /** The mouse has moved with a button held down. The current button state
+        is in Fl::event_state(). The mouse position is in Fl::event_x() and
+        Fl::event_y().
+
+        In order to receive FL_DRAG events, the widget must return non-zero
+        when handling FL_PUSH.
+     */
+    FL_DRAG = 5,
+
+    /** This indicates an <I>attempt</I> to give a widget the keyboard focus.
+
+        If a widget wants the focus, it should change itself to display the
+        fact that it has the focus, and return non-zero from its handle() method.
+        It then becomes the Fl::focus() widget and gets FL_KEYDOWN, FL_KEYUP,
+        and FL_UNFOCUS events.
+
+        The focus will change either because the window manager changed which
+        window gets the focus, or because the user tried to navigate using tab,
+        arrows, or other keys. You can check Fl::event_key() to figure out why
+        it moved. For navigation it will be the key pressed and for interaction
+        with the window manager it will be zero.
+     */
+    FL_FOCUS = 6,
+
+    /** This event is sent to the previous Fl::focus() widget when another
+        widget gets the focus or the window loses focus.
+     */
+    FL_UNFOCUS = 7,
+
+    /** A key was pressed (FL_KEYDOWN) or released (FL_KEYUP).
+        Fl_KEYBOARD is a synonym for FL_KEYDOWN.
+        The key can be found in Fl::event_key().
+        The text that the key should insert can be found with Fl::event_text()
+        and its length is in Fl::event_length(). If you use the key handle()
+        should return 1. If you return zero then FLTK assumes you ignored the
+        key and will then attempt to send it to a parent widget. If none of
+        them want it, it will change the event into a FL_SHORTCUT event.
+
+        To receive FL_KEYBOARD events you must also respond to the FL_FOCUS
+        and FL_UNFOCUS events.
+
+        If you are writing a text-editing widget you may also want to call
+        the Fl::compose() function to translate individual keystrokes into
+        non-ASCII characters.
+
+        FL_KEYUP events are sent to the widget that currently has focus. This
+        is not necessarily the same widget that received the corresponding
+        FL_KEYDOWN event because focus may have changed between events.
+     */
+    FL_KEYDOWN = 8,
+
+    /** Equivalent to FL_KEYDOWN.
+        \see FL_KEYDOWN
+     */
+    FL_KEYBOARD = 8,
+
+    /** Key release event.
+        \see FL_KEYDOWN
+     */
+    FL_KEYUP = 9,
+
+    /** The user clicked the close button of a window.
+        This event is used internally only to trigger the callback of
+        Fl_Window derived classed. The default callback closes the
+        window calling Fl_Window::hide().
+     */
+    FL_CLOSE = 10,
+
+    /** The mouse has moved without any mouse buttons held down.
+        This event is sent to the Fl::belowmouse() widget.
+
+        In order to receive FL_MOVE events, the widget must return
+        non-zero when handling FL_ENTER.
+     */
+    FL_MOVE = 11,
+
+    /** If the Fl::focus() widget is zero or ignores an FL_KEYBOARD
+        event then FLTK tries sending this event to every widget it
+        can, until one of them returns non-zero. FL_SHORTCUT is first
+        sent to the Fl::belowmouse() widget, then its parents and siblings,
+        and eventually to every widget in the window, trying to find an
+        object that returns non-zero. FLTK tries really hard to not to ignore
+        any keystrokes!
+
+        You can also make "global" shortcuts by using Fl::add_handler(). A
+        global shortcut will work no matter what windows are displayed or
+        which one has the focus.
+     */
+    FL_SHORTCUT = 12,
+
+    /** This widget is no longer active, due to Fl_Widget::deactivate()
+        being called on it or one of its parents. Fl_Widget::active() may
+        still be true after this, the widget is only active if Fl_Widget::active()
+        is true on it and all its parents (use Fl_Widget::active_r() to check this).
+     */
+    FL_DEACTIVATE = 13,
+
+    /** This widget is now active, due to Fl_Widget::activate() being
+        called on it or one of its parents.
+     */
+    FL_ACTIVATE = 14,
+
+    /** This widget is no longer visible, due to Fl_Widget::hide() being
+        called on it or one of its parents, or due to a parent window being
+        minimized.  Fl_Widget::visible() may still be true after this, but the
+        widget is visible only if visible() is true for it and all its
+        parents (use Fl_Widget::visible_r() to check this).
+     */
+    FL_HIDE = 15,
+
+    /** This widget is visible again, due to Fl_Widget::show() being called on
+        it or one of its parents, or due to a parent window being restored.
+        Child Fl_Windows respond to this by actually creating the window if not
+        done already, so if you subclass a window, be sure to pass FL_SHOW
+        to the base class Fl_Widget::handle() method!
+     */
+    FL_SHOW = 16,
+
+    /** You should get this event some time after you call Fl::paste().
+        The contents of Fl::event_text() is the text to insert and the number
+        of characters is in Fl::event_length().
+     */
+    FL_PASTE = 17,
+
+    /** The Fl::selection_owner() will get this event before the selection is
+        moved to another widget. This indicates that some other widget or program
+        has claimed the selection. Motif programs used this to clear the selection
+        indication. Most modern programs ignore this.
+     */
+    FL_SELECTIONCLEAR = 18,
+
+    /** The user has moved the mouse wheel. The Fl::event_dx() and Fl::event_dy()
+        methods can be used to find the amount to scroll horizontally and vertically.
+     */
+    FL_MOUSEWHEEL = 19,
+
+    /** The mouse has been moved to point at this widget. A widget that is
+        interested in receiving drag'n'drop data must return 1 to receive
+        FL_DND_DRAG, FL_DND_LEAVE and FL_DND_RELEASE events.
+     */
+    FL_DND_ENTER = 20,
+
+    /** The mouse has been moved inside a widget while dragging data.  A
+        widget that is interested in receiving drag'n'drop data should
+        indicate the possible drop position.
+     */
+    FL_DND_DRAG = 21,
+
+    /** The mouse has moved out of the widget.
+     */
+    FL_DND_LEAVE = 22,
+
+    /** The user has released the mouse button dropping data into the widget.
+        If the widget returns 1, it will receive the data in the immediately
+        following FL_PASTE event.
+     */
+    FL_DND_RELEASE = 23,
+    /** The screen configuration (number, positions) was changed.
+     Use Fl::add_handler() to be notified of this event.
+     */
+    FL_SCREEN_CONFIGURATION_CHANGED = 24,
+    /** The fullscreen state of the window has changed
+     */
+    FL_FULLSCREEN = 25,
+    /** The user has made a zoom/pinch/magnification gesture.
+        The Fl::event_dy() method can be used to find magnification amount,
+        Fl::event_x() and Fl::event_y() are set as well.
+       */
+    FL_ZOOM_GESTURE = 26
 };
 
 /** \name When Conditions */
@@ -435,32 +436,32 @@ enum Fl_Event {	// events
     \todo doxygen comments for values are incomplete and maybe wrong or unclear
  */
 enum Fl_When { // Fl_Widget::when():
-  FL_WHEN_NEVER		= 0,	///< Never call the callback
-  FL_WHEN_CHANGED	= 1,	///< Do the callback only when the widget value changes
-  FL_WHEN_NOT_CHANGED	= 2,	///< Do the callback whenever the user interacts with the widget
-  FL_WHEN_RELEASE	= 4,	///< Do the callback when the button or key is released and the value changes
-  FL_WHEN_RELEASE_ALWAYS= 6,	///< Do the callback when the button or key is released, even if the value doesn't change
-  FL_WHEN_ENTER_KEY	= 8,	///< Do the callback when the user presses the ENTER key and the value changes
-  FL_WHEN_ENTER_KEY_ALWAYS=10,	///< Do the callback when the user presses the ENTER key, even if the value doesn't change
-  FL_WHEN_ENTER_KEY_CHANGED=11	///< ?
+    FL_WHEN_NEVER = 0,	///< Never call the callback
+    FL_WHEN_CHANGED = 1,	///< Do the callback only when the widget value changes
+    FL_WHEN_NOT_CHANGED = 2,	///< Do the callback whenever the user interacts with the widget
+    FL_WHEN_RELEASE = 4,	///< Do the callback when the button or key is released and the value changes
+    FL_WHEN_RELEASE_ALWAYS = 6,	///< Do the callback when the button or key is released, even if the value doesn't change
+    FL_WHEN_ENTER_KEY = 8,	///< Do the callback when the user presses the ENTER key and the value changes
+    FL_WHEN_ENTER_KEY_ALWAYS = 10,	///< Do the callback when the user presses the ENTER key, even if the value doesn't change
+    FL_WHEN_ENTER_KEY_CHANGED = 11	///< ?
 };
 
 /*@}*/		// group: When Conditions
 
 /** \name Mouse and Keyboard Events
 
-	This and the following constants define the non-ASCII keys on the
-	keyboard for FL_KEYBOARD and FL_SHORTCUT events.
+    This and the following constants define the non-ASCII keys on the
+    keyboard for FL_KEYBOARD and FL_SHORTCUT events.
 
-	\todo	FL_Button and FL_key... constants could be structured better
-		(use an enum or some doxygen grouping ?)
-  
-	\sa	Fl::event_key() and Fl::get_key(int) (use ascii letters for all other keys):
+    \todo	FL_Button and FL_key... constants could be structured better
+        (use an enum or some doxygen grouping ?)
+
+    \sa	Fl::event_key() and Fl::get_key(int) (use ascii letters for all other keys):
  */
 
-/*@{*/
+ /*@{*/
 
-// FIXME: These codes collide with valid Unicode keys
+ // FIXME: These codes collide with valid Unicode keys
 
 #define FL_Button	0xfee8	///< A mouse button; use Fl_Button + n for mouse button n.
 #define FL_BackSpace	0xff08	///< The backspace key.
@@ -528,9 +529,9 @@ enum Fl_When { // Fl_Widget::when():
 
 /** \name Mouse Buttons
 
-	These constants define the button numbers for FL_PUSH and FL_RELEASE events.
-	
-	\sa Fl::event_button()
+    These constants define the button numbers for FL_PUSH and FL_RELEASE events.
+
+    \sa Fl::event_button()
 */
 
 /*@{*/
@@ -544,7 +545,7 @@ enum Fl_When { // Fl_Widget::when():
 
 /** \name	Event States
 
-	The following constants define bits in the Fl::event_state() value.
+    The following constants define bits in the Fl::event_state() value.
 */
 
 /*@{*/		// group: Event States
@@ -557,11 +558,11 @@ enum Fl_When { // Fl_Widget::when():
 #define FL_CTRL		0x00040000	///< One of the ctrl keys is down
 #define FL_ALT		0x00080000	///< One of the alt keys is down
 #define FL_NUM_LOCK	0x00100000	///< The num lock is on
-					// most X servers do this?
+                    // most X servers do this?
 #define FL_META		0x00400000	///< One of the meta/Windows keys is down
-					// correct for XFree86
+                    // correct for XFree86
 #define FL_SCROLL_LOCK	0x00800000	///< The scroll lock is on
-					// correct for XFree86
+                    // correct for XFree86
 #define FL_BUTTON1	0x01000000	///< Mouse button 1 is pushed
 #define FL_BUTTON2	0x02000000	///< Mouse button 2 is pushed
 #define FL_BUTTON3	0x04000000	///< Mouse button 3 is pushed
@@ -569,7 +570,7 @@ enum Fl_When { // Fl_Widget::when():
 #define FL_BUTTON(n)	(0x00800000<<(n)) ///< Mouse button n (n > 0) is pushed
 
 #define FL_KEY_MASK 0x0000ffff		///< All keys are 16 bit for now 
-					//   FIXME: Unicode needs 24 bits!
+                    //   FIXME: Unicode needs 24 bits!
 
 #ifdef __APPLE__
 #  define FL_COMMAND	FL_META		///< An alias for FL_CTRL on WIN32 and X11, or FL_META on MacOS X
@@ -583,80 +584,80 @@ enum Fl_When { // Fl_Widget::when():
 
 /** \name Box Types
     \brief FLTK standard box types
-    
+
     This enum defines the standard box types included with FLTK.
-    
-    FL_NO_BOX means nothing is drawn at all, so whatever is already 
-    on the screen remains. The FL_..._FRAME types only draw their edges, 
-    leaving the interior unchanged. The blue color in Figure 1 
+
+    FL_NO_BOX means nothing is drawn at all, so whatever is already
+    on the screen remains. The FL_..._FRAME types only draw their edges,
+    leaving the interior unchanged. The blue color in Figure 1
     is the area that is not drawn by the frame types.
-    
+
     \image html boxtypes.png "Figure 1: FLTK standard box types"
     \image latex boxtypes.png "FLTK standard box types" width=10cm
     \todo	Description of boxtypes is incomplete.
-    		See below for the defined enum Fl_Boxtype.
-		\see src/Fl_get_system_colors.cxx
+            See below for the defined enum Fl_Boxtype.
+        \see src/Fl_get_system_colors.cxx
 */
 /*@{*/
 enum Fl_Boxtype { // boxtypes (if you change these you must fix fl_boxtype.cxx):
 
-  FL_NO_BOX = 0,		///< nothing is drawn at all, this box is invisible
-  FL_FLAT_BOX,			///< a flat box
-  FL_UP_BOX,			///< see figure 1
-  FL_DOWN_BOX,			///< see figure 1
-  FL_UP_FRAME,			///< see figure 1
-  FL_DOWN_FRAME,		///< see figure 1
-  FL_THIN_UP_BOX,		///< see figure 1
-  FL_THIN_DOWN_BOX,		///< see figure 1
-  FL_THIN_UP_FRAME,		///< see figure 1
-  FL_THIN_DOWN_FRAME,		///< see figure 1
-  FL_ENGRAVED_BOX,		///< see figure 1
-  FL_EMBOSSED_BOX,		///< see figure 1
-  FL_ENGRAVED_FRAME,		///< see figure 1
-  FL_EMBOSSED_FRAME,		///< see figure 1
-  FL_BORDER_BOX,		///< see figure 1
-  _FL_SHADOW_BOX,		///< see figure 1
-  FL_BORDER_FRAME,		///< see figure 1
-  _FL_SHADOW_FRAME,		///< see figure 1
-  _FL_ROUNDED_BOX,		///< see figure 1
-  _FL_RSHADOW_BOX,		///< see figure 1
-  _FL_ROUNDED_FRAME,		///< see figure 1
-  _FL_RFLAT_BOX,		///< see figure 1
-  _FL_ROUND_UP_BOX,		///< see figure 1
-  _FL_ROUND_DOWN_BOX,		///< see figure 1
-  _FL_DIAMOND_UP_BOX,		///< see figure 1
-  _FL_DIAMOND_DOWN_BOX,		///< see figure 1
-  _FL_OVAL_BOX,			///< see figure 1
-  _FL_OSHADOW_BOX,		///< see figure 1
-  _FL_OVAL_FRAME,		///< see figure 1
-  _FL_OFLAT_BOX,		///< see figure 1
-  _FL_PLASTIC_UP_BOX,		///< plastic version of FL_UP_BOX
-  _FL_PLASTIC_DOWN_BOX,		///< plastic version of FL_DOWN_BOX
-  _FL_PLASTIC_UP_FRAME,		///< plastic version of FL_UP_FRAME
-  _FL_PLASTIC_DOWN_FRAME,	///< plastic version of FL_DOWN_FRAME
-  _FL_PLASTIC_THIN_UP_BOX,	///< plastic version of FL_THIN_UP_BOX
-  _FL_PLASTIC_THIN_DOWN_BOX,	///< plastic version of FL_THIN_DOWN_BOX
-  _FL_PLASTIC_ROUND_UP_BOX,	///< plastic version of FL_ROUND_UP_BOX
-  _FL_PLASTIC_ROUND_DOWN_BOX,	///< plastic version of FL_ROUND_DOWN_BOX
-  _FL_GTK_UP_BOX,		///< gtk+ version of FL_UP_BOX
-  _FL_GTK_DOWN_BOX,		///< gtk+ version of FL_DOWN_BOX
-  _FL_GTK_UP_FRAME,		///< gtk+ version of FL_UP_FRAME
-  _FL_GTK_DOWN_FRAME,		///< gtk+ version of FL_DOWN_FRAME
-  _FL_GTK_THIN_UP_BOX,		///< gtk+ version of FL_THIN_UP_BOX
-  _FL_GTK_THIN_DOWN_BOX,	///< gtk+ version of FL_THIN_DOWN_BOX
-  _FL_GTK_THIN_UP_FRAME,	///< gtk+ version of FL_THIN_UP_FRAME
-  _FL_GTK_THIN_DOWN_FRAME,	///< gtk+ version of FL_THIN_DOWN_FRAME
-  _FL_GTK_ROUND_UP_BOX,		///< gtk+ version of FL_ROUND_UP_BOX
-  _FL_GTK_ROUND_DOWN_BOX,	///< gtk+ version of FL_ROUND_DOWN_BOX
-  _FL_GLEAM_UP_BOX,		///< gleam version of FL_UP_BOX
-  _FL_GLEAM_DOWN_BOX,		///< gleam version of FL_DOWN_BOX
-  _FL_GLEAM_UP_FRAME,		///< gleam version of FL_UP_FRAME
-  _FL_GLEAM_DOWN_FRAME,		///< gleam version of FL_DOWN_FRAME
-  _FL_GLEAM_THIN_UP_BOX,	///< gleam version of FL_THIN_UP_BOX
-  _FL_GLEAM_THIN_DOWN_BOX,	///< gleam version of FL_THIN_DOWN_BOX
-  _FL_GLEAM_ROUND_UP_BOX,	///< gleam version of FL_ROUND_UP_BOX
-  _FL_GLEAM_ROUND_DOWN_BOX,	///< gleam version of FL_ROUND_DOWN_BOX
-  FL_FREE_BOXTYPE		///< the first free box type for creation of new box types
+    FL_NO_BOX = 0,		///< nothing is drawn at all, this box is invisible
+    FL_FLAT_BOX,			///< a flat box
+    FL_UP_BOX,			///< see figure 1
+    FL_DOWN_BOX,			///< see figure 1
+    FL_UP_FRAME,			///< see figure 1
+    FL_DOWN_FRAME,		///< see figure 1
+    FL_THIN_UP_BOX,		///< see figure 1
+    FL_THIN_DOWN_BOX,		///< see figure 1
+    FL_THIN_UP_FRAME,		///< see figure 1
+    FL_THIN_DOWN_FRAME,		///< see figure 1
+    FL_ENGRAVED_BOX,		///< see figure 1
+    FL_EMBOSSED_BOX,		///< see figure 1
+    FL_ENGRAVED_FRAME,		///< see figure 1
+    FL_EMBOSSED_FRAME,		///< see figure 1
+    FL_BORDER_BOX,		///< see figure 1
+    _FL_SHADOW_BOX,		///< see figure 1
+    FL_BORDER_FRAME,		///< see figure 1
+    _FL_SHADOW_FRAME,		///< see figure 1
+    _FL_ROUNDED_BOX,		///< see figure 1
+    _FL_RSHADOW_BOX,		///< see figure 1
+    _FL_ROUNDED_FRAME,		///< see figure 1
+    _FL_RFLAT_BOX,		///< see figure 1
+    _FL_ROUND_UP_BOX,		///< see figure 1
+    _FL_ROUND_DOWN_BOX,		///< see figure 1
+    _FL_DIAMOND_UP_BOX,		///< see figure 1
+    _FL_DIAMOND_DOWN_BOX,		///< see figure 1
+    _FL_OVAL_BOX,			///< see figure 1
+    _FL_OSHADOW_BOX,		///< see figure 1
+    _FL_OVAL_FRAME,		///< see figure 1
+    _FL_OFLAT_BOX,		///< see figure 1
+    _FL_PLASTIC_UP_BOX,		///< plastic version of FL_UP_BOX
+    _FL_PLASTIC_DOWN_BOX,		///< plastic version of FL_DOWN_BOX
+    _FL_PLASTIC_UP_FRAME,		///< plastic version of FL_UP_FRAME
+    _FL_PLASTIC_DOWN_FRAME,	///< plastic version of FL_DOWN_FRAME
+    _FL_PLASTIC_THIN_UP_BOX,	///< plastic version of FL_THIN_UP_BOX
+    _FL_PLASTIC_THIN_DOWN_BOX,	///< plastic version of FL_THIN_DOWN_BOX
+    _FL_PLASTIC_ROUND_UP_BOX,	///< plastic version of FL_ROUND_UP_BOX
+    _FL_PLASTIC_ROUND_DOWN_BOX,	///< plastic version of FL_ROUND_DOWN_BOX
+    _FL_GTK_UP_BOX,		///< gtk+ version of FL_UP_BOX
+    _FL_GTK_DOWN_BOX,		///< gtk+ version of FL_DOWN_BOX
+    _FL_GTK_UP_FRAME,		///< gtk+ version of FL_UP_FRAME
+    _FL_GTK_DOWN_FRAME,		///< gtk+ version of FL_DOWN_FRAME
+    _FL_GTK_THIN_UP_BOX,		///< gtk+ version of FL_THIN_UP_BOX
+    _FL_GTK_THIN_DOWN_BOX,	///< gtk+ version of FL_THIN_DOWN_BOX
+    _FL_GTK_THIN_UP_FRAME,	///< gtk+ version of FL_THIN_UP_FRAME
+    _FL_GTK_THIN_DOWN_FRAME,	///< gtk+ version of FL_THIN_DOWN_FRAME
+    _FL_GTK_ROUND_UP_BOX,		///< gtk+ version of FL_ROUND_UP_BOX
+    _FL_GTK_ROUND_DOWN_BOX,	///< gtk+ version of FL_ROUND_DOWN_BOX
+    _FL_GLEAM_UP_BOX,		///< gleam version of FL_UP_BOX
+    _FL_GLEAM_DOWN_BOX,		///< gleam version of FL_DOWN_BOX
+    _FL_GLEAM_UP_FRAME,		///< gleam version of FL_UP_FRAME
+    _FL_GLEAM_DOWN_FRAME,		///< gleam version of FL_DOWN_FRAME
+    _FL_GLEAM_THIN_UP_BOX,	///< gleam version of FL_THIN_UP_BOX
+    _FL_GLEAM_THIN_DOWN_BOX,	///< gleam version of FL_THIN_DOWN_BOX
+    _FL_GLEAM_ROUND_UP_BOX,	///< gleam version of FL_ROUND_UP_BOX
+    _FL_GLEAM_ROUND_DOWN_BOX,	///< gleam version of FL_ROUND_DOWN_BOX
+    FL_FREE_BOXTYPE		///< the first free box type for creation of new box types
 };
 extern FL_EXPORT Fl_Boxtype fl_define_FL_ROUND_UP_BOX();
 #define FL_ROUND_UP_BOX fl_define_FL_ROUND_UP_BOX()
@@ -719,7 +720,7 @@ extern FL_EXPORT Fl_Boxtype fl_define_FL_GLEAM_UP_BOX();
   is undefined and some random box or frame is returned.
  */
 inline Fl_Boxtype fl_box(Fl_Boxtype b) {
-  return (Fl_Boxtype)((b<FL_UP_BOX||b%4>1)?b:(b-2));
+    return (Fl_Boxtype)((b < FL_UP_BOX || b % 4>1) ? b : (b - 2));
 }
 /**
   Get the "pressed" or "down" version of a box.
@@ -727,7 +728,7 @@ inline Fl_Boxtype fl_box(Fl_Boxtype b) {
   is undefined and some random box or frame is returned.
  */
 inline Fl_Boxtype fl_down(Fl_Boxtype b) {
-  return (Fl_Boxtype)((b<FL_UP_BOX)?b:(b|1));
+    return (Fl_Boxtype)((b < FL_UP_BOX) ? b : (b | 1));
 }
 /**
   Get the unfilled, frame only version of a box.
@@ -735,7 +736,7 @@ inline Fl_Boxtype fl_down(Fl_Boxtype b) {
   is undefined and some random box or frame is returned.
  */
 inline Fl_Boxtype fl_frame(Fl_Boxtype b) {
-  return (Fl_Boxtype)((b%4<2)?b:(b+2));
+    return (Fl_Boxtype)((b % 4 < 2) ? b : (b + 2));
 }
 
 // back-compatibility box types:
@@ -752,27 +753,27 @@ inline Fl_Boxtype fl_frame(Fl_Boxtype b) {
    The following standard label types are included:
 
    \todo	The doxygen comments are incomplete, and some labeltypes
-   	start with an underscore. Also, there are three
-		external functions undocumented (yet):
-		  - fl_define_FL_SHADOW_LABEL()
-		  - fl_define_FL_ENGRAVED_LABEL()
-		  - fl_define_FL_EMBOSSED_LABEL()
+    start with an underscore. Also, there are three
+        external functions undocumented (yet):
+          - fl_define_FL_SHADOW_LABEL()
+          - fl_define_FL_ENGRAVED_LABEL()
+          - fl_define_FL_EMBOSSED_LABEL()
 */
 enum Fl_Labeltype {	// labeltypes:
-  FL_NORMAL_LABEL	= 0, ///< draws the text (0)
-  FL_NO_LABEL,         ///< does nothing
-  _FL_SHADOW_LABEL,    ///< draws a drop shadow under the text
-  _FL_ENGRAVED_LABEL,	 ///< draws edges as though the text is engraved
-  _FL_EMBOSSED_LABEL,  ///< draws edges as though the text is raised
-  _FL_MULTI_LABEL,     ///< draws a composite label \see Fl_Multi_Label
-  _FL_ICON_LABEL,      ///< draws the icon associated with the text
-  _FL_IMAGE_LABEL,     ///< the label displays an "icon" based on a Fl_Image
+    FL_NORMAL_LABEL = 0, ///< draws the text (0)
+    FL_NO_LABEL,         ///< does nothing
+    _FL_SHADOW_LABEL,    ///< draws a drop shadow under the text
+    _FL_ENGRAVED_LABEL,	 ///< draws edges as though the text is engraved
+    _FL_EMBOSSED_LABEL,  ///< draws edges as though the text is raised
+    _FL_MULTI_LABEL,     ///< draws a composite label \see Fl_Multi_Label
+    _FL_ICON_LABEL,      ///< draws the icon associated with the text
+    _FL_IMAGE_LABEL,     ///< the label displays an "icon" based on a Fl_Image
 
-  FL_FREE_LABELTYPE    ///< first free labeltype to use for creating own labeltypes
+    FL_FREE_LABELTYPE    ///< first free labeltype to use for creating own labeltypes
 };
 
-/** 
-  Sets the current label type and return its corresponding Fl_Labeltype value. 
+/**
+  Sets the current label type and return its corresponding Fl_Labeltype value.
   @{
 */
 #define FL_SYMBOL_LABEL FL_NORMAL_LABEL
@@ -784,10 +785,10 @@ extern Fl_Labeltype FL_EXPORT fl_define_FL_EMBOSSED_LABEL();
 #define FL_EMBOSSED_LABEL fl_define_FL_EMBOSSED_LABEL()
 /** @} */
 
-/** \name Alignment Flags 
-    Flags to control the label alignment. 
+/** \name Alignment Flags
+    Flags to control the label alignment.
 
-    This controls how the label is displayed next to or inside the widget. 
+    This controls how the label is displayed next to or inside the widget.
     The default value is FL_ALIGN_CENTER (0) for most widgets, which centers
     the label inside the widget.
 
@@ -821,80 +822,80 @@ extern Fl_Labeltype FL_EXPORT fl_define_FL_EMBOSSED_LABEL();
     \endcode
     \see #FL_ALIGN_CENTER, etc.
  */
-/*@{*/
-/** FLTK type for alignment control */
+ /*@{*/
+ /** FLTK type for alignment control */
 typedef unsigned Fl_Align;
-  /** Align the label horizontally in the middle. */
-const Fl_Align FL_ALIGN_CENTER		= (Fl_Align)0;
-  /** Align the label at the top of the widget. Inside labels appear below the top,
-      outside labels are drawn on top of the widget. */
-const Fl_Align FL_ALIGN_TOP		= (Fl_Align)1;
-  /** Align the label at the bottom of the widget. */
-const Fl_Align FL_ALIGN_BOTTOM		= (Fl_Align)2;
-  /** Align the label at the left of the widget. Inside labels appear left-justified
-      starting at the left side of the widget, outside labels are right-justified and
-      drawn to the left of the widget. */
-const Fl_Align FL_ALIGN_LEFT		= (Fl_Align)4;
-  /** Align the label to the right of the widget. */
-const Fl_Align FL_ALIGN_RIGHT		= (Fl_Align)8;
-  /** Draw the label inside of the widget. */
-const Fl_Align FL_ALIGN_INSIDE		= (Fl_Align)16;
-  /** If the label contains an image, draw the text on top of the image. */
-const Fl_Align FL_ALIGN_TEXT_OVER_IMAGE	= (Fl_Align)0x0020;
-  /** If the label contains an image, draw the text below the image. */
-const Fl_Align FL_ALIGN_IMAGE_OVER_TEXT	= (Fl_Align)0x0000;
-  /** All parts of the label that are lager than the widget will not be drawn . */
-const Fl_Align FL_ALIGN_CLIP		= (Fl_Align)64;
-  /** Wrap text that does not fit the width of the widget. */
-const Fl_Align FL_ALIGN_WRAP		= (Fl_Align)128;
-  /** If the label contains an image, draw the text to the right of the image. */
+/** Align the label horizontally in the middle. */
+const Fl_Align FL_ALIGN_CENTER = (Fl_Align)0;
+/** Align the label at the top of the widget. Inside labels appear below the top,
+    outside labels are drawn on top of the widget. */
+const Fl_Align FL_ALIGN_TOP = (Fl_Align)1;
+/** Align the label at the bottom of the widget. */
+const Fl_Align FL_ALIGN_BOTTOM = (Fl_Align)2;
+/** Align the label at the left of the widget. Inside labels appear left-justified
+    starting at the left side of the widget, outside labels are right-justified and
+    drawn to the left of the widget. */
+const Fl_Align FL_ALIGN_LEFT = (Fl_Align)4;
+/** Align the label to the right of the widget. */
+const Fl_Align FL_ALIGN_RIGHT = (Fl_Align)8;
+/** Draw the label inside of the widget. */
+const Fl_Align FL_ALIGN_INSIDE = (Fl_Align)16;
+/** If the label contains an image, draw the text on top of the image. */
+const Fl_Align FL_ALIGN_TEXT_OVER_IMAGE = (Fl_Align)0x0020;
+/** If the label contains an image, draw the text below the image. */
+const Fl_Align FL_ALIGN_IMAGE_OVER_TEXT = (Fl_Align)0x0000;
+/** All parts of the label that are lager than the widget will not be drawn . */
+const Fl_Align FL_ALIGN_CLIP = (Fl_Align)64;
+/** Wrap text that does not fit the width of the widget. */
+const Fl_Align FL_ALIGN_WRAP = (Fl_Align)128;
+/** If the label contains an image, draw the text to the right of the image. */
 const Fl_Align FL_ALIGN_IMAGE_NEXT_TO_TEXT = (Fl_Align)0x0100;
-  /** If the label contains an image, draw the text to the left of the image. */
+/** If the label contains an image, draw the text to the left of the image. */
 const Fl_Align FL_ALIGN_TEXT_NEXT_TO_IMAGE = (Fl_Align)0x0120;
 /** If the label contains an image, draw the image or deimage in the background. */
-const Fl_Align FL_ALIGN_IMAGE_BACKDROP  = (Fl_Align)0x0200;
-const Fl_Align FL_ALIGN_TOP_LEFT	= FL_ALIGN_TOP | FL_ALIGN_LEFT;
-const Fl_Align FL_ALIGN_TOP_RIGHT	= FL_ALIGN_TOP | FL_ALIGN_RIGHT;
-const Fl_Align FL_ALIGN_BOTTOM_LEFT	= FL_ALIGN_BOTTOM | FL_ALIGN_LEFT;
-const Fl_Align FL_ALIGN_BOTTOM_RIGHT	= FL_ALIGN_BOTTOM | FL_ALIGN_RIGHT;
-const Fl_Align FL_ALIGN_LEFT_TOP	= 0x0007; // magic value
-const Fl_Align FL_ALIGN_RIGHT_TOP	= 0x000b; // magic value
-const Fl_Align FL_ALIGN_LEFT_BOTTOM	= 0x000d; // magic value
-const Fl_Align FL_ALIGN_RIGHT_BOTTOM	= 0x000e; // magic value
-const Fl_Align FL_ALIGN_NOWRAP		= (Fl_Align)0; // for back compatibility
-const Fl_Align FL_ALIGN_POSITION_MASK   = 0x000f; // left, right, top, bottom
-const Fl_Align FL_ALIGN_IMAGE_MASK      = 0x0320; // l/r, t/b, backdrop
+const Fl_Align FL_ALIGN_IMAGE_BACKDROP = (Fl_Align)0x0200;
+const Fl_Align FL_ALIGN_TOP_LEFT = FL_ALIGN_TOP | FL_ALIGN_LEFT;
+const Fl_Align FL_ALIGN_TOP_RIGHT = FL_ALIGN_TOP | FL_ALIGN_RIGHT;
+const Fl_Align FL_ALIGN_BOTTOM_LEFT = FL_ALIGN_BOTTOM | FL_ALIGN_LEFT;
+const Fl_Align FL_ALIGN_BOTTOM_RIGHT = FL_ALIGN_BOTTOM | FL_ALIGN_RIGHT;
+const Fl_Align FL_ALIGN_LEFT_TOP = 0x0007; // magic value
+const Fl_Align FL_ALIGN_RIGHT_TOP = 0x000b; // magic value
+const Fl_Align FL_ALIGN_LEFT_BOTTOM = 0x000d; // magic value
+const Fl_Align FL_ALIGN_RIGHT_BOTTOM = 0x000e; // magic value
+const Fl_Align FL_ALIGN_NOWRAP = (Fl_Align)0; // for back compatibility
+const Fl_Align FL_ALIGN_POSITION_MASK = 0x000f; // left, right, top, bottom
+const Fl_Align FL_ALIGN_IMAGE_MASK = 0x0320; // l/r, t/b, backdrop
 /*@}*/
 
 
 /** \name Font Numbers
     The following constants define the standard FLTK fonts:
  */
-/*@{*/
-/** A font number is an index into the internal font table. */
+ /*@{*/
+ /** A font number is an index into the internal font table. */
 typedef int Fl_Font;
 
-const Fl_Font FL_HELVETICA              = 0;	///< Helvetica (or Arial) normal (0)
-const Fl_Font FL_HELVETICA_BOLD         = 1;	///< Helvetica (or Arial) bold
-const Fl_Font FL_HELVETICA_ITALIC       = 2;	///< Helvetica (or Arial) oblique
-const Fl_Font FL_HELVETICA_BOLD_ITALIC  = 3;	///< Helvetica (or Arial) bold-oblique
-const Fl_Font FL_COURIER                = 4;	///< Courier normal
-const Fl_Font FL_COURIER_BOLD           = 5;	///< Courier bold 
-const Fl_Font FL_COURIER_ITALIC         = 6;	///< Courier italic
-const Fl_Font FL_COURIER_BOLD_ITALIC    = 7;	///< Courier bold-italic
-const Fl_Font FL_TIMES                  = 8;	///< Times roman
-const Fl_Font FL_TIMES_BOLD             = 9;	///< Times roman bold
-const Fl_Font FL_TIMES_ITALIC           = 10;	///< Times roman italic
-const Fl_Font FL_TIMES_BOLD_ITALIC      = 11;	///< Times roman bold-italic
-const Fl_Font FL_SYMBOL                 = 12;	///< Standard symbol font
-const Fl_Font FL_SCREEN                 = 13;	///< Default monospaced screen font
-const Fl_Font FL_SCREEN_BOLD            = 14;	///< Default monospaced bold screen font
-const Fl_Font FL_ZAPF_DINGBATS          = 15;	///< Zapf-dingbats font
+const Fl_Font FL_HELVETICA = 0;	///< Helvetica (or Arial) normal (0)
+const Fl_Font FL_HELVETICA_BOLD = 1;	///< Helvetica (or Arial) bold
+const Fl_Font FL_HELVETICA_ITALIC = 2;	///< Helvetica (or Arial) oblique
+const Fl_Font FL_HELVETICA_BOLD_ITALIC = 3;	///< Helvetica (or Arial) bold-oblique
+const Fl_Font FL_COURIER = 4;	///< Courier normal
+const Fl_Font FL_COURIER_BOLD = 5;	///< Courier bold 
+const Fl_Font FL_COURIER_ITALIC = 6;	///< Courier italic
+const Fl_Font FL_COURIER_BOLD_ITALIC = 7;	///< Courier bold-italic
+const Fl_Font FL_TIMES = 8;	///< Times roman
+const Fl_Font FL_TIMES_BOLD = 9;	///< Times roman bold
+const Fl_Font FL_TIMES_ITALIC = 10;	///< Times roman italic
+const Fl_Font FL_TIMES_BOLD_ITALIC = 11;	///< Times roman bold-italic
+const Fl_Font FL_SYMBOL = 12;	///< Standard symbol font
+const Fl_Font FL_SCREEN = 13;	///< Default monospaced screen font
+const Fl_Font FL_SCREEN_BOLD = 14;	///< Default monospaced bold screen font
+const Fl_Font FL_ZAPF_DINGBATS = 15;	///< Zapf-dingbats font
 
-const Fl_Font FL_FREE_FONT              = 16;	///< first one to allocate
-const Fl_Font FL_BOLD                   = 1;	///< add this to helvetica, courier, or times
-const Fl_Font FL_ITALIC                 = 2;	///< add this to helvetica, courier, or times
-const Fl_Font FL_BOLD_ITALIC            = 3;	///< add this to helvetica, courier, or times
+const Fl_Font FL_FREE_FONT = 16;	///< first one to allocate
+const Fl_Font FL_BOLD = 1;	///< add this to helvetica, courier, or times
+const Fl_Font FL_ITALIC = 2;	///< add this to helvetica, courier, or times
+const Fl_Font FL_BOLD_ITALIC = 3;	///< add this to helvetica, courier, or times
 
 /*@}*/
 
@@ -905,7 +906,7 @@ typedef int Fl_Fontsize;
 
 extern FL_EXPORT Fl_Fontsize FL_NORMAL_SIZE;	///< normal font size
 
-/** \name Colors 
+/** \name Colors
     The Fl_Color type holds an FLTK color value.
 
     Colors are either 8-bit indexes into a <a href="fltk-colormap.png">virtual colormap</a>
@@ -923,50 +924,50 @@ extern FL_EXPORT Fl_Fontsize FL_NORMAL_SIZE;	///< normal font size
                 +--------- red component (8 bit)
  </pre>
 
-    A color can have either an index or an rgb value. Colors with rgb set 
+    A color can have either an index or an rgb value. Colors with rgb set
     and an index >0 are reserved for special use.
 
  */
-/*@{*/
-/** An FLTK color value; see also \ref drawing_colors  */
+ /*@{*/
+ /** An FLTK color value; see also \ref drawing_colors  */
 typedef unsigned int Fl_Color;
 
 // Standard colors. These are used as default colors in widgets and altered as necessary
-const Fl_Color FL_FOREGROUND_COLOR  = 0;	///< the default foreground color (0) used for labels and text
+const Fl_Color FL_FOREGROUND_COLOR = 0;	///< the default foreground color (0) used for labels and text
 const Fl_Color FL_BACKGROUND2_COLOR = 7;	///< the default background color for text, list, and valuator widgets
-const Fl_Color FL_INACTIVE_COLOR    = 8;	///< the inactive foreground color
-const Fl_Color FL_SELECTION_COLOR   = 15;	///< the default selection/highlight color
+const Fl_Color FL_INACTIVE_COLOR = 8;	///< the inactive foreground color
+const Fl_Color FL_SELECTION_COLOR = 15;	///< the default selection/highlight color
 
-  // boxtypes generally limit themselves to these colors so
-  // the whole ramp is not allocated:
+// boxtypes generally limit themselves to these colors so
+// the whole ramp is not allocated:
 
-const Fl_Color FL_GRAY0   = 32;			// 'A'
-const Fl_Color FL_DARK3   = 39;			// 'H'
-const Fl_Color FL_DARK2   = 45;			// 'N'
-const Fl_Color FL_DARK1   = 47;			// 'P'
-const Fl_Color FL_BACKGROUND_COLOR  = 49;	// 'R' default background color
-const Fl_Color FL_LIGHT1  = 50;			// 'S'
-const Fl_Color FL_LIGHT2  = 52;			// 'U'
-const Fl_Color FL_LIGHT3  = 54;			// 'W'
+const Fl_Color FL_GRAY0 = 32;			// 'A'
+const Fl_Color FL_DARK3 = 39;			// 'H'
+const Fl_Color FL_DARK2 = 45;			// 'N'
+const Fl_Color FL_DARK1 = 47;			// 'P'
+const Fl_Color FL_BACKGROUND_COLOR = 49;	// 'R' default background color
+const Fl_Color FL_LIGHT1 = 50;			// 'S'
+const Fl_Color FL_LIGHT2 = 52;			// 'U'
+const Fl_Color FL_LIGHT3 = 54;			// 'W'
 
-  // FLTK provides a 5x8x5 color cube that is used with colormap visuals
+// FLTK provides a 5x8x5 color cube that is used with colormap visuals
 
-const Fl_Color FL_BLACK   = 56;
-const Fl_Color FL_RED     = 88;
-const Fl_Color FL_GREEN   = 63;
-const Fl_Color FL_YELLOW  = 95;
-const Fl_Color FL_BLUE    = 216;
+const Fl_Color FL_BLACK = 56;
+const Fl_Color FL_RED = 88;
+const Fl_Color FL_GREEN = 63;
+const Fl_Color FL_YELLOW = 95;
+const Fl_Color FL_BLUE = 216;
 const Fl_Color FL_MAGENTA = 248;
-const Fl_Color FL_CYAN    = 223;
+const Fl_Color FL_CYAN = 223;
 const Fl_Color FL_DARK_RED = 72;
 
-const Fl_Color FL_DARK_GREEN    = 60;
-const Fl_Color FL_DARK_YELLOW   = 76;
-const Fl_Color FL_DARK_BLUE     = 136;
-const Fl_Color FL_DARK_MAGENTA  = 152;
-const Fl_Color FL_DARK_CYAN     = 140;
+const Fl_Color FL_DARK_GREEN = 60;
+const Fl_Color FL_DARK_YELLOW = 76;
+const Fl_Color FL_DARK_BLUE = 136;
+const Fl_Color FL_DARK_MAGENTA = 152;
+const Fl_Color FL_DARK_CYAN = 140;
 
-const Fl_Color FL_WHITE         = 255;
+const Fl_Color FL_WHITE = 255;
 
 
 #define FL_FREE_COLOR     (Fl_Color)16
@@ -993,14 +994,14 @@ inline Fl_Color fl_darker(Fl_Color c) { return fl_color_average(c, FL_BLACK, .67
 
 /** Returns the 24-bit color value closest to \p r, \p g, \p b. */
 inline Fl_Color fl_rgb_color(uchar r, uchar g, uchar b) {
-  if (!r && !g && !b) return FL_BLACK;
-  else return (Fl_Color)(((((r << 8) | g) << 8) | b) << 8);
+    if (!r && !g && !b) return FL_BLACK;
+    else return (Fl_Color)(((((r << 8) | g) << 8) | b) << 8);
 }
 
 /** Returns the 24-bit color value closest to \p g (grayscale). */
 inline Fl_Color fl_rgb_color(uchar g) {
-  if (!g) return FL_BLACK;
-  else return (Fl_Color)(((((g << 8) | g) << 8) | g) << 8);
+    if (!g) return FL_BLACK;
+    else return (Fl_Color)(((((g << 8) | g) << 8) | g) << 8);
 }
 
 /** Returns a gray color value from black (i == 0) to white (i == FL_NUM_GRAY - 1).
@@ -1011,7 +1012,7 @@ inline Fl_Color fl_rgb_color(uchar g) {
    fl_gray_ramp(I * (FL_NUM_GRAY - 1) / 255)
  \endcode
 */
-inline Fl_Color fl_gray_ramp(int i) {return (Fl_Color)(i+FL_GRAY_RAMP);}
+inline Fl_Color fl_gray_ramp(int i) { return (Fl_Color)(i + FL_GRAY_RAMP); }
 
 /** Returns a color out of the color cube.
 
@@ -1028,7 +1029,8 @@ inline Fl_Color fl_gray_ramp(int i) {return (Fl_Color)(i+FL_GRAY_RAMP);}
   \endcode
  */
 inline Fl_Color fl_color_cube(int r, int g, int b) {
-  return (Fl_Color)((b*FL_NUM_RED + r) * FL_NUM_GREEN + g + FL_COLOR_CUBE);}
+    return (Fl_Color)((b * FL_NUM_RED + r) * FL_NUM_GREEN + g + FL_COLOR_CUBE);
+}
 
 /*@}*/		// group: Colors
 
@@ -1044,55 +1046,55 @@ inline Fl_Color fl_color_cube(int r, int g, int b) {
 */
 /* FIXME: We should renumber these, but that will break the ABI */
 enum Fl_Cursor {
-  FL_CURSOR_DEFAULT    =  0, /**< the default cursor, usually an arrow. */
-  FL_CURSOR_ARROW      = 35, /**< an arrow pointer. */
-  FL_CURSOR_CROSS      = 66, /**< crosshair. */
-  FL_CURSOR_WAIT       = 76, /**< busy indicator (e.g. hourglass). */
-  FL_CURSOR_INSERT     = 77, /**< I-beam. */
-  FL_CURSOR_HAND       = 31, /**< pointing hand. */
-  FL_CURSOR_HELP       = 47, /**< question mark pointer. */
-  FL_CURSOR_MOVE       = 27, /**< 4-pointed arrow or hand. */
+    FL_CURSOR_DEFAULT = 0, /**< the default cursor, usually an arrow. */
+    FL_CURSOR_ARROW = 35, /**< an arrow pointer. */
+    FL_CURSOR_CROSS = 66, /**< crosshair. */
+    FL_CURSOR_WAIT = 76, /**< busy indicator (e.g. hourglass). */
+    FL_CURSOR_INSERT = 77, /**< I-beam. */
+    FL_CURSOR_HAND = 31, /**< pointing hand. */
+    FL_CURSOR_HELP = 47, /**< question mark pointer. */
+    FL_CURSOR_MOVE = 27, /**< 4-pointed arrow or hand. */
 
-  /* Resize indicators */
-  FL_CURSOR_NS         = 78, /**< up/down resize. */
-  FL_CURSOR_WE         = 79, /**< left/right resize. */
-  FL_CURSOR_NWSE       = 80, /**< diagonal resize. */
-  FL_CURSOR_NESW       = 81, /**< diagonal resize. */
-  FL_CURSOR_N          = 70, /**< upwards resize. */
-  FL_CURSOR_NE         = 69, /**< upwards, right resize. */
-  FL_CURSOR_E          = 49, /**< rightwards resize. */
-  FL_CURSOR_SE         =  8, /**< downwards, right resize. */
-  FL_CURSOR_S          =  9, /**< downwards resize. */
-  FL_CURSOR_SW         =  7, /**< downwards, left resize. */
-  FL_CURSOR_W          = 36, /**< leftwards resize. */
-  FL_CURSOR_NW         = 68, /**< upwards, left resize. */
+    /* Resize indicators */
+    FL_CURSOR_NS = 78, /**< up/down resize. */
+    FL_CURSOR_WE = 79, /**< left/right resize. */
+    FL_CURSOR_NWSE = 80, /**< diagonal resize. */
+    FL_CURSOR_NESW = 81, /**< diagonal resize. */
+    FL_CURSOR_N = 70, /**< upwards resize. */
+    FL_CURSOR_NE = 69, /**< upwards, right resize. */
+    FL_CURSOR_E = 49, /**< rightwards resize. */
+    FL_CURSOR_SE = 8, /**< downwards, right resize. */
+    FL_CURSOR_S = 9, /**< downwards resize. */
+    FL_CURSOR_SW = 7, /**< downwards, left resize. */
+    FL_CURSOR_W = 36, /**< leftwards resize. */
+    FL_CURSOR_NW = 68, /**< upwards, left resize. */
 
-  FL_CURSOR_NONE       =255  /**< invisible. */
+    FL_CURSOR_NONE = 255  /**< invisible. */
 };
 /*@}*/		// group: Cursors  
 
 /** FD "when" conditions */
 enum { // values for "when" passed to Fl::add_fd()
-  FL_READ   = 1, /**< Call the callback when there is data to be read. */
-  FL_WRITE  = 4, /**< Call the callback when data can be written without blocking. */
-  FL_EXCEPT = 8  /**< Call the callback if an exception occurs on the file. */
+    FL_READ = 1, /**< Call the callback when there is data to be read. */
+    FL_WRITE = 4, /**< Call the callback when data can be written without blocking. */
+    FL_EXCEPT = 8  /**< Call the callback if an exception occurs on the file. */
 };
 
 /** visual types and Fl_Gl_Window::mode() (values match Glut) */
-enum Fl_Mode { 
-  FL_RGB	= 0,
-  FL_INDEX	= 1,
-  FL_SINGLE	= 0,
-  FL_DOUBLE	= 2,
-  FL_ACCUM	= 4,
-  FL_ALPHA	= 8,
-  FL_DEPTH	= 16,
-  FL_STENCIL	= 32,
-  FL_RGB8	= 64,
-  FL_MULTISAMPLE= 128,
-  FL_STEREO     = 256,
-  FL_FAKE_SINGLE = 512,	// Fake single buffered windows using double-buffer
-  FL_OPENGL3    = 1024
+enum Fl_Mode {
+    FL_RGB = 0,
+    FL_INDEX = 1,
+    FL_SINGLE = 0,
+    FL_DOUBLE = 2,
+    FL_ACCUM = 4,
+    FL_ALPHA = 8,
+    FL_DEPTH = 16,
+    FL_STENCIL = 32,
+    FL_RGB8 = 64,
+    FL_MULTISAMPLE = 128,
+    FL_STEREO = 256,
+    FL_FAKE_SINGLE = 512,	// Fake single buffered windows using double-buffer
+    FL_OPENGL3 = 1024
 };
 
 // image alpha blending
@@ -1101,13 +1103,13 @@ enum Fl_Mode {
 
 /** Damage masks */
 enum Fl_Damage {
-  FL_DAMAGE_CHILD    = 0x01, /**< A child needs to be redrawn. */
-  FL_DAMAGE_EXPOSE   = 0x02, /**< The window was exposed. */
-  FL_DAMAGE_SCROLL   = 0x04, /**< The Fl_Scroll widget was scrolled. */
-  FL_DAMAGE_OVERLAY  = 0x08, /**< The overlay planes need to be redrawn. */
-  FL_DAMAGE_USER1    = 0x10, /**< First user-defined damage bit. */
-  FL_DAMAGE_USER2    = 0x20, /**< Second user-defined damage bit. */
-  FL_DAMAGE_ALL      = 0x80  /**< Everything needs to be redrawn. */
+    FL_DAMAGE_CHILD = 0x01, /**< A child needs to be redrawn. */
+    FL_DAMAGE_EXPOSE = 0x02, /**< The window was exposed. */
+    FL_DAMAGE_SCROLL = 0x04, /**< The Fl_Scroll widget was scrolled. */
+    FL_DAMAGE_OVERLAY = 0x08, /**< The overlay planes need to be redrawn. */
+    FL_DAMAGE_USER1 = 0x10, /**< First user-defined damage bit. */
+    FL_DAMAGE_USER2 = 0x20, /**< Second user-defined damage bit. */
+    FL_DAMAGE_ALL = 0x80  /**< Everything needs to be redrawn. */
 };
 
 // FLTK 1.0.x compatibility definitions...

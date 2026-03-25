@@ -101,6 +101,7 @@ int main(int argc, char **argv)
   printf("Interpolating...\n");
   Motion * pOutputMotion; // interpolated motion (output)
   interpolator.Interpolate(pInputMotion, &pOutputMotion, N);
+
   if (pOutputMotion == NULL)
   {
     printf("Error: interpolation failed. No output generated.\n");

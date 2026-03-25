@@ -20,25 +20,45 @@ Interpolator::~Interpolator()
 }
 
 //Create interpolated motion
-void Interpolator::Interpolate(Motion * pInputMotion, Motion ** pOutputMotion, int N) 
+void Interpolator::Interpolate(Motion* pInputMotion, Motion** pOutputMotion, int N)
 {
-  //Allocate new motion
-  *pOutputMotion = new Motion(pInputMotion->GetNumFrames(), pInputMotion->GetSkeleton()); 
+    //Allocate new motion
+    *pOutputMotion = new Motion(pInputMotion->GetNumFrames(), pInputMotion->GetSkeleton());
 
-  //Perform the interpolation
-  if ((m_InterpolationType == LINEAR) && (m_AngleRepresentation == EULER))
-    LinearInterpolationEuler(pInputMotion, *pOutputMotion, N);
-  else if ((m_InterpolationType == LINEAR) && (m_AngleRepresentation == QUATERNION))
-    LinearInterpolationQuaternion(pInputMotion, *pOutputMotion, N);
-  else if ((m_InterpolationType == BEZIER) && (m_AngleRepresentation == EULER))
-    BezierInterpolationEuler(pInputMotion, *pOutputMotion, N);
-  else if ((m_InterpolationType == BEZIER) && (m_AngleRepresentation == QUATERNION))
-    BezierInterpolationQuaternion(pInputMotion, *pOutputMotion, N);
-  else
-  {
-    printf("Error: unknown interpolation / angle representation type.\n");
-    exit(1);
-  }
+    //Perform the interpolation
+    if ((m_InterpolationType == LINEAR) && (m_AngleRepresentation == EULER))
+        LinearInterpolationEuler(pInputMotion, *pOutputMotion, N);
+    else if ((m_InterpolationType == LINEAR) && (m_AngleRepresentation == QUATERNION))
+        LinearInterpolationQuaternion(pInputMotion, *pOutputMotion, N);
+    else if ((m_InterpolationType == BEZIER) && (m_AngleRepresentation == EULER))
+        BezierInterpolationEuler(pInputMotion, *pOutputMotion, N);
+    else if ((m_InterpolationType == BEZIER) && (m_AngleRepresentation == QUATERNION))
+        BezierInterpolationQuaternion(pInputMotion, *pOutputMotion, N);
+    else
+    {
+        printf("Error: unknown interpolation / angle representation type.\n");
+        exit(1);
+    }
+
+    double eulerAngles[3] = {90,45,-30 };
+    double rotationMatrix[9] = { 0.5, -.5,.707, -.5, .5, .707 , -.707, -.707, 0 };
+    Quaternion<double> quat(0.701057, 0.560986, 0.430459, 0.092296);
+  
+    
+  Quaternion2Euler(quat, eulerAngles);
+
+  Rotation2Euler(rotationMatrix, eulerAngles);
+  Euler2Quaternion(eulerAngles, quat);
+  Quaternion2Euler(quat, eulerAngles);
+
+  Quaternion2Euler(quat, eulerAngles);
+  Euler2Rotation(eulerAngles, rotationMatrix);
+  Rotation2Euler(rotationMatrix, eulerAngles);
+  Euler2Quaternion(eulerAngles, quat);
+
+  //Euler2Quaternion(eulerAngles, quat);
+  //Quaternion2Euler(quat, eulerAngles);
+
 }
 
 void Interpolator::LinearInterpolationEuler(Motion * pInputMotion, Motion * pOutputMotion, int N)
@@ -82,28 +102,79 @@ void Interpolator::LinearInterpolationEuler(Motion * pInputMotion, Motion * pOut
 
 void Interpolator::Rotation2Euler(double R[9], double angles[3])
 {
-  double cy = sqrt(R[0]*R[0] + R[3]*R[3]);
+    // Extract Y first
+    double sy = R[2];  // sin(y)
+
+    // Clamp for safety
+    if (sy < -1.0) sy = -1.0;
+    if (sy > 1.0) sy = 1.0;
+
+    angles[1] = asin(sy); // Y
+
+    // Check for gimbal lock
+    if (fabs(cos(angles[1])) > 1e-6)
+    {
+        // X (roll)
+        angles[0] = atan2(-R[5], R[8]);
+
+        // Z (yaw)
+        angles[2] = atan2(-R[1], R[0]);
+    }
+    else
+    {
+        // Gimbal lock case
+        angles[0] = atan2(R[3], R[4]);
+        angles[2] = 0;
+    }
+
+    // Convert to degrees
+    for (int i = 0; i < 3; i++)
+        angles[i] *= 180.0 / M_PI;
+
+  /*double cy = sqrt(R[0]*R[0] + R[3]*R[3]);
 
   if (cy > 16*DBL_EPSILON) 
   {
-    angles[0] = atan2(R[7], R[8]);
+    angles[2] = atan2(R[7], R[8]);
     angles[1] = atan2(-R[6], cy);
-    angles[2] = atan2(R[3], R[0]);
+    angles[0] = atan2(R[3], R[0]);
   } 
   else 
   {
-    angles[0] = atan2(-R[5], R[4]);
+    angles[2] = atan2(-R[5], R[4]);
     angles[1] = atan2(-R[6], cy);
-    angles[2] = 0;
+    angles[0] = 0;
   }
 
   for(int i=0; i<3; i++)
-    angles[i] *= 180 / M_PI;
+    angles[i] *= 180 / M_PI;*/
 }
 
 void Interpolator::Euler2Rotation(double angles[3], double R[9])
 {
   // students should implement this
+
+    // Convert degrees to radians
+    double x = angles[2] * M_PI / 180.0;
+    double y = angles[1] * M_PI / 180.0;
+    double z = angles[0] * M_PI / 180.0;
+
+    double cx = cos(x), sx = sin(x);
+    double cy = cos(y), sy = sin(y);
+    double cz = cos(z), sz = sin(z);
+
+    // R = Rz * Ry * Rx
+    R[0] = cz * cy;
+    R[1] = cz * sy * sx - sz * cx;
+    R[2] = cz * sy * cx + sz * sx;
+
+    R[3] = sz * cy;
+    R[4] = sz * sy * sx + cz * cx;
+    R[5] = sz * sy * cx - cz * sx;
+
+    R[6] = -sy;
+    R[7] = cy * sx;
+    R[8] = cy * cx;
 }
 
 void Interpolator::BezierInterpolationEuler(Motion * pInputMotion, Motion * pOutputMotion, int N)
@@ -124,11 +195,75 @@ void Interpolator::BezierInterpolationQuaternion(Motion * pInputMotion, Motion *
 void Interpolator::Euler2Quaternion(double angles[3], Quaternion<double> & q) 
 {
   // students should implement this
+  
+    // Convert degrees to radians
+    double x = angles[0] * M_PI / 180.0;
+    double y = angles[1] * M_PI / 180.0;
+    double z = angles[2] * M_PI / 180.0;
+
+    // Compute half angles
+    double cx = cos(x * 0.5);
+    double sx = sin(x * 0.5);
+    double cy = cos(y * 0.5);
+    double sy = sin(y * 0.5);
+    double cz = cos(z * 0.5);
+    double sz = sin(z * 0.5);
+
+    // Quaternion (s, x, y, z)
+    double qs = cz * cy * cx - sz * sy * sx; // s
+    double qx = cz * cy * sx + sz * sy * cx; // x
+    double qy = cz * sy * cx - sz * cy * sx; // y
+    double qz = sz * cy * cx + cz * sy * sx; // z
+
+    /*double norm = sqrt(qs * qs + qx * qx + qy * qy + qz * qz);
+    qs /= norm;
+    qx /= norm;
+    qy /= norm;
+    qz /= norm;*/
+
+	q.Set(qs, qx, qy, qz); // identity quaternion
 }
 
 void Interpolator::Quaternion2Euler(Quaternion<double> & q, double angles[3]) 
 {
   // students should implement this
+  
+	double rotationMatrix[9];
+
+	q.Quaternion2Matrix(rotationMatrix);
+
+	Rotation2Euler(rotationMatrix, angles);
+
+
+    //double rotationMatrix[9] = {0,0,0,0,0,0,0,0,0};
+    //double norm = sqrt(q.Gets() * q.Gets() + q.Getx() * q.Getx() + q.Gety() * q.Gety() + q.Getz() * q.Getz());
+    //double s = q.Gets() / norm;
+    //double x = q.Getx() / norm;
+    //double y = q.Gety() / norm;
+    //double z = q.Getz() / norm;
+
+
+    //// Roll (X)
+    //double sinr_cosp = 2 * (s * x + y * z);
+    //double cosr_cosp = 1 - 2 * (x * x + y * y);
+    //angles[0] = atan2(sinr_cosp, cosr_cosp);
+
+    //// Pitch (Y)
+    //double sinp = 2 * (s * y - z * x);
+    //if (fabs(sinp) >= 1)
+    //    angles[1] = copysign(M_PI / 2, sinp);
+    //else
+    //    angles[1] = asin(sinp);
+
+    //// Yaw (Z)
+    //double siny_cosp = 2 * (s * z + x * y);
+    //double cosy_cosp = 1 - 2 * (y * y + z * z);
+    //angles[2] = atan2(siny_cosp, cosy_cosp);
+
+    //// Convert to degrees
+    //for (int i = 0; i < 3; i++)
+    //    angles[i] *= 180.0 / M_PI;
+
 }
 
 Quaternion<double> Interpolator::Slerp(double t, Quaternion<double> & qStart, Quaternion<double> & qEnd_)
