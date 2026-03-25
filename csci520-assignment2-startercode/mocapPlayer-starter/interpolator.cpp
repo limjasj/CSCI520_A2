@@ -234,42 +234,16 @@ void Interpolator::Quaternion2Euler(Quaternion<double> & q, double angles[3])
 
 	Rotation2Euler(rotationMatrix, angles);
 
-
-    //double rotationMatrix[9] = {0,0,0,0,0,0,0,0,0};
-    //double norm = sqrt(q.Gets() * q.Gets() + q.Getx() * q.Getx() + q.Gety() * q.Gety() + q.Getz() * q.Getz());
-    //double s = q.Gets() / norm;
-    //double x = q.Getx() / norm;
-    //double y = q.Gety() / norm;
-    //double z = q.Getz() / norm;
-
-
-    //// Roll (X)
-    //double sinr_cosp = 2 * (s * x + y * z);
-    //double cosr_cosp = 1 - 2 * (x * x + y * y);
-    //angles[0] = atan2(sinr_cosp, cosr_cosp);
-
-    //// Pitch (Y)
-    //double sinp = 2 * (s * y - z * x);
-    //if (fabs(sinp) >= 1)
-    //    angles[1] = copysign(M_PI / 2, sinp);
-    //else
-    //    angles[1] = asin(sinp);
-
-    //// Yaw (Z)
-    //double siny_cosp = 2 * (s * z + x * y);
-    //double cosy_cosp = 1 - 2 * (y * y + z * z);
-    //angles[2] = atan2(siny_cosp, cosy_cosp);
-
-    //// Convert to degrees
-    //for (int i = 0; i < 3; i++)
-    //    angles[i] *= 180.0 / M_PI;
-
 }
 
 Quaternion<double> Interpolator::Slerp(double t, Quaternion<double> & qStart, Quaternion<double> & qEnd_)
 {
   // students should implement this
   Quaternion<double> result;
+
+  double q1Coeff = sin((1 - t));
+
+
   return result;
 }
 
@@ -277,6 +251,14 @@ Quaternion<double> Interpolator::Double(Quaternion<double> p, Quaternion<double>
 {
   // students should implement this
   Quaternion<double> result;
+  Quaternion<double> mult;
+  Quaternion<double> subt;
+
+  mult = p * q;
+  mult = 2 * mult;
+  subt = p - q;
+  result = mult * subt;
+
   return result;
 }
 
@@ -284,6 +266,22 @@ vector Interpolator::DeCasteljauEuler(double t, vector p0, vector p1, vector p2,
 {
   // students should implement this
   vector result;
+  Quaternion<double> q0, q1, q2, r0, r1, pt;
+  Quaternion<double> point0, point1, point2, point3;
+  
+  Euler2Quaternion(p0.p, point0);
+  Euler2Quaternion(p1.p, point1);
+  Euler2Quaternion(p2.p, point2);
+  Euler2Quaternion(p3.p, point3);
+
+  q0 = Slerp(t, point0, point1);
+  q1 = Slerp(t, point1, point2);
+  q2 = Slerp(t, point2, point3);
+  r0 = Slerp(t, q0, q1);
+  r1 = Slerp(t, q1, q2);
+  pt = Slerp(t, r0, r1);
+
+  Quaternion2Euler(pt, result.p);
   return result;
 }
 
@@ -291,6 +289,15 @@ Quaternion<double> Interpolator::DeCasteljauQuaternion(double t, Quaternion<doub
 {
   // students should implement this
   Quaternion<double> result;
+  Quaternion<double> q0, q1, q2, r0, r1, pt;
+
+  q0 = Slerp(t, p0, p1);
+  q1 = Slerp(t, p1, p2);
+  q2 = Slerp(t, p2, p3);
+  r0 = Slerp(t, q0, q1);
+  r1 = Slerp(t, q1, q2);
+  pt = Slerp(t, r0, r1);
+
   return result;
 }
 
