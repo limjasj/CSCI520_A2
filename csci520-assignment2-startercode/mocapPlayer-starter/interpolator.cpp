@@ -1,4 +1,4 @@
-#include <stdio.h>
+﻿#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <float.h>
@@ -40,12 +40,22 @@ void Interpolator::Interpolate(Motion* pInputMotion, Motion** pOutputMotion, int
         exit(1);
     }
 
-    double eulerAngles[3] = {90,45,-30 };
+    double eulerAngles[3] = {-45, 30, 60 };
     double rotationMatrix[9] = { 0.5, -.5,.707, -.5, .5, .707 , -.707, -.707, 0 };
-    Quaternion<double> quat(0.701057, 0.560986, 0.430459, 0.092296);
+    Quaternion<double> quat(0.723317, 0.439680, 0.022260, 0.531976);
   
-    
-  Quaternion2Euler(quat, eulerAngles);
+    //Euler2Rotation(eulerAngles, rotationMatrix);
+    //Rotation2Euler(rotationMatrix, eulerAngles);
+
+    double R1[9], R2[9];
+    double out[3];
+    double input[3] = { 90,45,-30 };
+
+    Euler2Quaternion(eulerAngles, quat);
+    Quaternion2Euler(quat, eulerAngles);
+
+  //Euler2Quaternion(eulerAngles, quat);
+  //Euler2Rotation(eulerAngles, rotationMatrix);
 
   Rotation2Euler(rotationMatrix, eulerAngles);
   Euler2Quaternion(eulerAngles, quat);
@@ -102,52 +112,23 @@ void Interpolator::LinearInterpolationEuler(Motion * pInputMotion, Motion * pOut
 
 void Interpolator::Rotation2Euler(double R[9], double angles[3])
 {
-    // Extract Y first
-    double sy = R[2];  // sin(y)
-
-    // Clamp for safety
-    if (sy < -1.0) sy = -1.0;
-    if (sy > 1.0) sy = 1.0;
-
-    angles[1] = asin(sy); // Y
-
-    // Check for gimbal lock
-    if (fabs(cos(angles[1])) > 1e-6)
-    {
-        // X (roll)
-        angles[0] = atan2(-R[5], R[8]);
-
-        // Z (yaw)
-        angles[2] = atan2(-R[1], R[0]);
-    }
-    else
-    {
-        // Gimbal lock case
-        angles[0] = atan2(R[3], R[4]);
-        angles[2] = 0;
-    }
-
-    // Convert to degrees
-    for (int i = 0; i < 3; i++)
-        angles[i] *= 180.0 / M_PI;
-
-  /*double cy = sqrt(R[0]*R[0] + R[3]*R[3]);
+  double cy = sqrt(R[0]*R[0] + R[3]*R[3]);
 
   if (cy > 16*DBL_EPSILON) 
   {
-    angles[2] = atan2(R[7], R[8]);
+    angles[0] = atan2(R[7], R[8]);
     angles[1] = atan2(-R[6], cy);
-    angles[0] = atan2(R[3], R[0]);
+    angles[2] = atan2(R[3], R[0]);
   } 
   else 
   {
-    angles[2] = atan2(-R[5], R[4]);
+    angles[0] = atan2(-R[5], R[4]);
     angles[1] = atan2(-R[6], cy);
-    angles[0] = 0;
+    angles[2] = 0;
   }
 
   for(int i=0; i<3; i++)
-    angles[i] *= 180 / M_PI;*/
+    angles[i] *= 180 / M_PI;
 }
 
 void Interpolator::Euler2Rotation(double angles[3], double R[9])
@@ -155,20 +136,20 @@ void Interpolator::Euler2Rotation(double angles[3], double R[9])
   // students should implement this
 
     // Convert degrees to radians
-    double x = angles[2] * M_PI / 180.0;
+    double x = angles[0] * M_PI / 180.0;
     double y = angles[1] * M_PI / 180.0;
-    double z = angles[0] * M_PI / 180.0;
+    double z = angles[2] * M_PI / 180.0;
 
     double cx = cos(x), sx = sin(x);
     double cy = cos(y), sy = sin(y);
     double cz = cos(z), sz = sin(z);
 
     // R = Rz * Ry * Rx
-    R[0] = cz * cy;
+    R[0] = cy * cz;
     R[1] = cz * sy * sx - sz * cx;
     R[2] = cz * sy * cx + sz * sx;
 
-    R[3] = sz * cy;
+    R[3] = cy * sz;
     R[4] = sz * sy * sx + cz * cx;
     R[5] = sz * sy * cx - cz * sx;
 
@@ -222,12 +203,36 @@ void Interpolator::Quaternion2Euler(Quaternion<double> & q, double angles[3])
 {
   // students should implement this
   
-	double rotationMatrix[9];
+	double R[9];
+    double s = q.Gets();
+    double x = q.Getx();
+    double y = q.Gety();
+    double z = q.Getz();
+    // Normalize quaternion (important!)
+    double norm = sqrt(s * s + x * x + y * y + z * z);
+    s /= norm;
+    x /= norm;
+    y /= norm;
+    z /= norm;
 
-	q.Quaternion2Matrix(rotationMatrix);
+    // Quaternion → Rotation Matrix (row-major)
+    R[0] = 1 - 2 * y * y - 2 * z * z;
+    R[1] = 2 * x * y + 2 * z * s;
+    R[2] = 2 * x * z - 2 * y * s;
 
-	Rotation2Euler(rotationMatrix, angles);
+    R[3] = 2 * x * y - 2 * z * s;
+    R[4] = 1 - 2 * x * x - 2 * z * z;
+    R[5] = 2 * y * z + 2 * x * s;
 
+    R[6] = 2 * x * z + 2 * y * s;
+    R[7] = 2 * y * z - 2 * x * s;
+    R[8] = 1 - 2 * x * x - 2 * y * y;
+
+	Rotation2Euler(R, angles);
+
+    angles[0] *= -1.0;
+    angles[1] *= -1.0;
+    angles[2] *= -1.0;
 }
 
 Quaternion<double> Interpolator::Slerp(double t, Quaternion<double> & qStart, Quaternion<double> & qEnd_)
