@@ -79,6 +79,14 @@ double len( vector const& v )
   return sqrt( v.p[0]*v.p[0] + v.p[1]*v.p[1] + v.p[2]*v.p[2] );
 }
 
+vector normalize(vector const& v)
+{
+    double l = len(v);
+    if (l == 0.0)
+        return vector(0.0, 0.0, 0.0);
+    return v / l;
+}
+
 double vector::length() const
 {
   return sqrt( p[0]*p[0] + p[1]*p[1] + p[2]*p[2] );

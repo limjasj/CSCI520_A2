@@ -53,6 +53,8 @@ protected:
   // quaternion interpolation
   Quaternion<double> Slerp(double t, Quaternion<double> & qStart, Quaternion<double> & qEnd);
   Quaternion<double> Double(Quaternion<double> p, Quaternion<double> q);
+  Quaternion<double> Bisect(Quaternion<double> p, Quaternion<double> q);
+  double Dot(Quaternion<double> p, Quaternion<double> q);
 
   // interpolation routines
   void LinearInterpolationEuler(Motion * pInputMotion, Motion * pOutputMotion, int N);
