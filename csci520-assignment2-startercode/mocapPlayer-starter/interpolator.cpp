@@ -8,11 +8,13 @@
 #include <cmath>
 #include "vector.h"
 #include <iostream>
+#include <chrono>
 
 bool isGraphOne = false;
 bool isGraphTwo = false;
 bool isGraphThree = false;
 bool isGraphFour = false;
+bool checkTime = false;
 
 Interpolator::Interpolator()
 {
@@ -30,31 +32,95 @@ Interpolator::~Interpolator()
 //Create interpolated motion
 void Interpolator::Interpolate(Motion* pInputMotion, Motion** pOutputMotion, int N)
 {
-    double euler[3] = { -90,-70,30 };
-    Quaternion<double> q;
-    double out[3];
-
-    Euler2Quaternion(euler, q);
-    Quaternion2Euler(q, out);
-
     //Allocate new motion
     *pOutputMotion = new Motion(pInputMotion->GetNumFrames(), pInputMotion->GetSkeleton());
 
-    //Perform the interpolation
-    if ((m_InterpolationType == LINEAR) && (m_AngleRepresentation == EULER))
-        LinearInterpolationEuler(pInputMotion, *pOutputMotion, N);
-    else if ((m_InterpolationType == LINEAR) && (m_AngleRepresentation == QUATERNION))
-        LinearInterpolationQuaternion(pInputMotion, *pOutputMotion, N);
-    else if ((m_InterpolationType == BEZIER) && (m_AngleRepresentation == EULER))
-        BezierInterpolationEuler(pInputMotion, *pOutputMotion, N);
-    else if ((m_InterpolationType == BEZIER) && (m_AngleRepresentation == QUATERNION))
-        BezierInterpolationQuaternion(pInputMotion, *pOutputMotion, N);
-    else
+    if (isGraphOne)
     {
-        printf("Error: unknown interpolation / angle representation type.\n");
-        exit(1);
+        std::cout << "linear euler" << std::endl;
+        LinearInterpolationEuler(pInputMotion, *pOutputMotion, N);
+        std::cout << "bezier euler" << std::endl;
+        BezierInterpolationEuler(pInputMotion, *pOutputMotion, N);
     }
+    else if (isGraphTwo)
+    {
+        std::cout << "linear quat" << std::endl;
+        LinearInterpolationQuaternion(pInputMotion, *pOutputMotion, N);
+        std::cout << "bezier quat" << std::endl;
+        BezierInterpolationQuaternion(pInputMotion, *pOutputMotion, N);
+    }
+    else if (isGraphThree)
+    {
+        std::cout << "linear euler" << std::endl;
+        LinearInterpolationEuler(pInputMotion, *pOutputMotion, N);
+        std::cout << "linear quat" << std::endl;
+        LinearInterpolationQuaternion(pInputMotion, *pOutputMotion, N);
+    }
+    else if (isGraphFour)
+    {
+        std::cout << "bezier euler" << std::endl;
+        BezierInterpolationEuler(pInputMotion, *pOutputMotion, N);
+        std::cout << "bezier quat" << std::endl;
+        BezierInterpolationQuaternion(pInputMotion, *pOutputMotion, N);
+    }
+    if (checkTime)
+    {
+        std::chrono::steady_clock::time_point start, end;
+        std::chrono::duration<double, std::milli> duration;
 
+        for (int i = 0; i < 4; i++)
+        {
+            if (i == 0) N = 10;
+            else if (i== 1) N = 20;
+            else if (i == 2) N = 40;
+			else if (i == 3) N = 80;
+
+            std::cout << "N: " << N << std::endl;
+            
+            start = std::chrono::steady_clock::now();
+            LinearInterpolationEuler(pInputMotion, *pOutputMotion, N);
+            end = std::chrono::steady_clock::now();
+            duration = end - start;
+            std::cout << duration.count()<< std::endl;
+
+            start = std::chrono::steady_clock::now();
+            LinearInterpolationQuaternion(pInputMotion, *pOutputMotion, N);
+            end = std::chrono::steady_clock::now();
+            duration = end - start;
+            std::cout << duration.count() << std::endl;
+
+            start = std::chrono::steady_clock::now();
+            BezierInterpolationEuler(pInputMotion, *pOutputMotion, N);
+            end = std::chrono::steady_clock::now();
+            duration = end - start;
+            std::cout << duration.count() << std::endl;
+
+            start = std::chrono::steady_clock::now();
+            BezierInterpolationQuaternion(pInputMotion, *pOutputMotion, N);
+            end = std::chrono::steady_clock::now();
+            duration = end - start;
+            std::cout << duration.count() << std::endl;
+        }
+
+    }
+    else //normal functionality
+    {
+        //Perform the interpolation
+        if ((m_InterpolationType == LINEAR) && (m_AngleRepresentation == EULER))
+            LinearInterpolationEuler(pInputMotion, *pOutputMotion, N);
+        else if ((m_InterpolationType == LINEAR) && (m_AngleRepresentation == QUATERNION))
+            LinearInterpolationQuaternion(pInputMotion, *pOutputMotion, N);
+        else if ((m_InterpolationType == BEZIER) && (m_AngleRepresentation == EULER))
+            BezierInterpolationEuler(pInputMotion, *pOutputMotion, N);
+        else if ((m_InterpolationType == BEZIER) && (m_AngleRepresentation == QUATERNION))
+            BezierInterpolationQuaternion(pInputMotion, *pOutputMotion, N);
+        else
+        {
+            printf("Error: unknown interpolation / angle representation type.\n");
+            exit(1);
+        }
+    }
+	
 }
 
 void Interpolator::LinearInterpolationEuler(Motion * pInputMotion, Motion * pOutputMotion, int N)
@@ -367,7 +433,7 @@ void Interpolator::BezierInterpolationQuaternion(Motion * pInputMotion, Motion *
         // interpolate in between 
         for (int frame = 1; frame <= N; frame++)
         {
-			std::cout << "Frame: " << startKeyframe + frame << std::endl;
+			//std::cout << "Frame: " << startKeyframe + frame << std::endl;
             double k = 0;
             if ((startKeyframe + frame) == 418)
             {
@@ -380,10 +446,8 @@ void Interpolator::BezierInterpolationQuaternion(Motion * pInputMotion, Motion *
 
             Posture interpolatedPosture;
 
-            vector prevRoot = (startKeyframe > 0) ? pInputMotion->GetPosture(startKeyframe - 1)->root_pos : P1->root_pos;
-            vector nextRoot = (endKeyframe < inputLength - 1) ? pInputMotion->GetPosture(endKeyframe + 1)->root_pos : P4->root_pos;
-            vector C1 = P1->root_pos + (P1->root_pos - prevRoot) / 3.0;
-            vector C2 = P4->root_pos - (nextRoot - P4->root_pos) / 3.0;
+              vector C1 = P1->root_pos + (P1->root_pos - prev->root_pos) / 3.0;
+            vector C2 = P4->root_pos - (next->root_pos - P4->root_pos) / 3.0;
             // Bezier formula for root position 
             interpolatedPosture.root_pos =
                 P1->root_pos * u * u * u +
@@ -404,26 +468,10 @@ void Interpolator::BezierInterpolationQuaternion(Motion * pInputMotion, Motion *
                 Euler2Quaternion(P4->bone_rotation[bone].p, qn1);
                 Euler2Quaternion(next->bone_rotation[bone].p, qNext);
 
-               /* Quaternion<double> an = Slerp(1.0 / 3.0, qn,
-                    Slerp(0.5, qPrev, qn1));
-                Quaternion<double> bn1 = Slerp(1.0 / 3.0, qn1,
-                    Slerp(0.5, qn, qNext));*/
                Quaternion<double> anBar = Slerp(0.5, Slerp(2.0, qPrev, qn), qn1);
 				Quaternion<double> an = Slerp(1.0/3.0, qn, anBar);
                 Quaternion<double> bnBar = Slerp(0.5, Slerp(2.0, qn, qn1), qNext);
                 Quaternion<double> bn1 = Slerp(-1.0 / 3.0, qn1, bnBar);
-                //Quaternion<double> bn = Slerp(-1.0 / 3.0, qn, anBar);
-    // 
-    //            Quaternion<double> an =Bisect(Double(qPrev, qn),qn1);
-    //            Quaternion<double> bn = Double(an, qn);
-    //            Quaternion<double> an1 = Bisect(Double(qn, qn1), qNext);
-				//Quaternion<double> bn1 = Double(an1, qn1);
-
-    //            Quaternion<double> p01 = Slerp(u, qn, an);
-				//Quaternion<double> p11 = Slerp(u, p01, bn1); //bn1 = p20
-    //            Quaternion<double> p02 = Slerp(u, p01, p11);
-				//Quaternion<double> p21 = Slerp(u, bn1, qn1);
-
 
                 Quaternion<double> result = DeCasteljauQuaternion(t, qn, an, bn1, qn1);
 
@@ -445,7 +493,7 @@ void Interpolator::BezierInterpolationQuaternion(Motion * pInputMotion, Motion *
 
                 Quaternion2Euler(result, interpolatedPosture.bone_rotation[bone].p);
 
-                if(bone ==0)
+                if(false)
                 {
                     std::cout<< interpolatedPosture.bone_rotation[bone].p[0]<<
 						" " << interpolatedPosture.bone_rotation[bone].p[1] <<
@@ -494,12 +542,6 @@ void Interpolator::Euler2Quaternion(double angles[3], Quaternion<double> & q)
     double cz = cos(z * 0.5);
     double sz = sin(z * 0.5);
 
-    // Quaternion (s, x, y, z)
-    //double qs = cz * cy * cx - sz * sy * sx; // s
-    //double qx = cz * cy * sx + sz * sy * cx; // x
-    //double qy = cz * sy * cx - sz * cy * sx; // y
-    //double qz = sz * cy * cx + cz * sy * sx; // z
-
     double qs = cx * cy * cz + sx * sy * sz;
     double qx = sx * cy * cz - cx * sy * sz;
     double qy = cx * sy * cz + sx * cy * sz;
@@ -515,13 +557,6 @@ void Interpolator::Quaternion2Euler(Quaternion<double> & q, double angles[3])
     double x = q.Getx();
     double y = q.Gety();
     double z = q.Getz();
-    // Normalize quaternion (important!)
-    //double norm = sqrt(s * s + x * x + y * y + z * z);
-    //s /= norm;
-    //x /= norm;
-    //y /= norm;
-    //z /= norm;
-
 
     // Quaternion → Rotation Matrix (row-major)
     R[0] = 1 - 2 * y * y - 2 * z * z;
@@ -538,88 +573,38 @@ void Interpolator::Quaternion2Euler(Quaternion<double> & q, double angles[3])
 
 
 	Rotation2Euler(R, angles);
-
-
 }
 
 Quaternion<double> Interpolator::Slerp(double t, Quaternion<double> & qStart, Quaternion<double> & qEnd_)
 {
   // students should implement this
-
     Quaternion<double> result;
-  Quaternion<double> qEnd = qEnd_;
-
+    Quaternion<double> qEnd = qEnd_;
     double dot = qStart.Gets() * qEnd.Gets() + qStart.Getx() * qEnd.Getx() +
          qStart.Gety() * qEnd.Gety() + qStart.Getz() * qEnd.Getz();
 
     if (dot < 0) {
-
         qEnd = qEnd * -1.0;
         dot = -dot;
-
     }
-
     double  s = 1 - t;
-
     if (dot < 0.9995) {
-
         // slerp
-
         double theta = acos(dot);
         double angleSin = sin(theta);
 
         s = sin(s * theta) / angleSin;
         t = sin(t * theta) / angleSin;
 
-            result = qStart * s + qEnd  * t;
-
-
+        result = qStart * s + qEnd  * t;
     }
     else {
 
         // for small angles, lerp then normalize
-
         result = qStart * s + qEnd * t;
-
-        result.Normalize(); // normalize calls _onChangeCallback()
-
+        result.Normalize(); 
     }
-
     return result;
-  //Quaternion<double> result;
-  //Quaternion<double> qEnd = qEnd_;
-  //// Calculate angle between them.
-  //double cosHalfTheta = qStart.Gets() * qEnd.Gets() + qStart.Getx() * qEnd.Getx() +
-  //    qStart.Gety() * qEnd.Gety() + qStart.Getz() * qEnd.Getz();
-
-  //// if qa=qb or qa=-qb then theta = 0 and we can return qa 
-  //if (cosHalfTheta < 0.0)
-  //{
-  //    qEnd = qEnd * -1.0;
-  //    cosHalfTheta = -cosHalfTheta;
-  //}
-  //else if(cosHalfTheta >= 1.0)
-  //{
-  //    return qStart;
-  //}
-
-  //// Calculate temporary values.
-  //double halfTheta = acos(cosHalfTheta);
-  //double sinHalfTheta = sqrt(1.0 - cosHalfTheta * cosHalfTheta);
-
-  //// if theta = 180 degrees then result is not fully defined
-  //// we could rotate around any axis normal to qa or qb
-  //if (fabs(sinHalfTheta) < 0.001) { // fabs is floating point absolute
-	 // result = qStart * 0.5 + qEnd * 0.5;
-  //    return result;
-  //}
-
-  //double ratioA = sin((1 - t) * halfTheta) / sinHalfTheta;
-  //double ratioB = sin(t * halfTheta) / sinHalfTheta;
-  ////calculate Quaternion.
-  //result = ratioA * qStart + ratioB * qEnd;
-  //result.Normalize();
-  //return result;
 }
 
 Quaternion<double> Interpolator::Double(Quaternion<double> p, Quaternion<double> q)
